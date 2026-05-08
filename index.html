@@ -1,0 +1,2040 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FieldPrice — Verified Industrial Pricing</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <style>
+        /* ─────────────────────────────────────────
+           DESIGN TOKENS
+        ───────────────────────────────────────── */
+        :root {
+            --ink: #121212;
+            --ink-2: #1c1c1c;
+            --ink-3: #252525;
+            --bd-dark: rgba(255, 255, 255, 0.10);
+            --bd-dark-hi: rgba(255, 255, 255, 0.18);
+            --txt: #f2f2f2;
+            --txt-60: rgba(242, 242, 242, 0.60);
+            --txt-30: rgba(242, 242, 242, 0.30);
+            --txt-12: rgba(242, 242, 242, 0.08);
+
+            --paper: #fbfbfb;
+            --paper-2: #f3f3f3;
+            --paper-bd: #e2e2e2;
+            --ink-lt: #111111;
+            --ink-lt-60: #5a5a5a;
+            --ink-lt-30: #a0a0a0;
+
+            --green: #22c55e;
+            --green-dk: #16a34a;
+            --green-bg: rgba(34, 197, 94, 0.10);
+            --green-bd: rgba(34, 197, 94, 0.28);
+
+            --serif: 'Playfair Display', Georgia, serif;
+            --sans: 'DM Sans', sans-serif;
+            --r: 6px;
+        }
+
+        /* ─────────────────────────────────────────
+           BASE
+        ───────────────────────────────────────── */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: var(--sans);
+            background: var(--ink);
+            color: var(--txt);
+            line-height: 1.65;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        button {
+            font-family: var(--sans);
+            cursor: pointer;
+            border: none;
+            background: none;
+        }
+        img {
+            display: block;
+            max-width: 100%;
+        }
+
+        /* ─────────────────────────────────────────
+           LAYOUT
+        ───────────────────────────────────────── */
+        .wrap {
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 0 5%;
+        }
+        .sec {
+            padding: 88px 5%;
+        }
+
+        /* ─────────────────────────────────────────
+           TYPOGRAPHY HELPERS
+        ───────────────────────────────────────── */
+        .eyebrow {
+            font-size: .68rem;
+            font-weight: 700;
+            letter-spacing: .16em;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+        .eyebrow-dk {
+            color: var(--txt-30);
+        }
+        .eyebrow-lt {
+            color: var(--ink-lt-30);
+        }
+
+        h1 {
+            font-family: var(--serif);
+            font-size: clamp(2.2rem, 5vw, 3.8rem);
+            font-weight: 500;
+            line-height: 1.1;
+            letter-spacing: -.015em;
+        }
+        h2 {
+            font-family: var(--serif);
+            font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+            font-weight: 500;
+            line-height: 1.18;
+            letter-spacing: -.01em;
+        }
+        h3 {
+            font-size: .9rem;
+            font-weight: 600;
+        }
+
+        .lead-dk {
+            font-size: .97rem;
+            color: var(--txt-60);
+            line-height: 1.8;
+        }
+        .lead-lt {
+            font-size: .97rem;
+            color: var(--ink-lt-60);
+            line-height: 1.8;
+        }
+        .rule-dk {
+            width: 32px;
+            height: 1.5px;
+            background: var(--bd-dark);
+            margin: 18px 0;
+        }
+        .rule-lt {
+            width: 32px;
+            height: 1.5px;
+            background: var(--paper-bd);
+            margin: 18px 0;
+        }
+
+        /* ─────────────────────────────────────────
+           BUTTONS
+        ───────────────────────────────────────── */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: var(--r);
+            font-family: var(--sans);
+            font-size: .875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all .2s;
+            white-space: nowrap;
+            border: none;
+            letter-spacing: .01em;
+        }
+        .btn-lg {
+            padding: 14px 30px;
+            font-size: .92rem;
+        }
+
+        .btn-green {
+            background: var(--green);
+            color: #fff;
+        }
+        .btn-green:hover {
+            background: var(--green-dk);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(34, 197, 94, .3);
+        }
+
+        .btn-wa {
+            background: #1dab5f;
+            color: #fff;
+        }
+        .btn-wa:hover {
+            background: #18984f;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(29, 171, 95, .3);
+        }
+
+        .btn-ghost-dk {
+            background: transparent;
+            color: var(--txt);
+            border: 1.5px solid var(--bd-dark-hi);
+        }
+        .btn-ghost-dk:hover {
+            border-color: rgba(255, 255, 255, .45);
+            background: var(--txt-12);
+        }
+
+        .btn-ghost-lt {
+            background: transparent;
+            color: var(--ink-lt);
+            border: 1.5px solid #c0c0c0;
+        }
+        .btn-ghost-lt:hover {
+            border-color: var(--green);
+            color: var(--green-dk);
+        }
+
+        /* ─────────────────────────────────────────
+           NAV
+        ───────────────────────────────────────── */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 300;
+            height: 60px;
+            padding: 0 5%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(18, 18, 18, .97);
+            backdrop-filter: blur(24px);
+            border-bottom: 1px solid var(--bd-dark);
+        }
+        .logo {
+            font-family: var(--serif);
+            font-size: 1.25rem;
+            font-weight: 500;
+            cursor: pointer;
+            user-select: none;
+        }
+        .logo-f {
+            color: var(--txt);
+        }
+        .logo-p {
+            color: var(--green);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2px;
+            list-style: none;
+        }
+        .nav-links button {
+            padding: 7px 14px;
+            border-radius: var(--r);
+            font-size: .82rem;
+            font-weight: 500;
+            color: var(--txt-30);
+            transition: all .18s;
+            font-family: var(--sans);
+        }
+        .nav-links button:hover {
+            color: var(--txt);
+            background: var(--txt-12);
+        }
+        .nav-links button.active {
+            color: var(--green);
+            background: var(--green-bg);
+        }
+
+        /* ─────────────────────────────────────────
+           PAGE SYSTEM
+        ───────────────────────────────────────── */
+        .page {
+            display: none;
+            padding-top: 60px;
+        }
+        .page.active {
+            display: block;
+            animation: fadein .3s ease;
+        }
+        @keyframes fadein {
+            from {
+                opacity: 0;
+                transform: translateY(6px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ─────────────────────────────────────────
+           HOME — HERO  (dark)
+        ───────────────────────────────────────── */
+        .hero {
+            padding: 80px 5% 88px;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 1px solid var(--bd-dark);
+        }
+        /* dot grid texture */
+        .hero::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background-image: radial-gradient(circle, rgba(255, 255, 255, .04) 1px, transparent 1px);
+            background-size: 36px 36px;
+        }
+        .hero-inner {
+            max-width: 1080px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 64px;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+        .hero-kicker {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: .68rem;
+            font-weight: 700;
+            letter-spacing: .16em;
+            text-transform: uppercase;
+            color: var(--txt-30);
+            margin-bottom: 22px;
+        }
+        .hero-kicker::before {
+            content: '';
+            width: 22px;
+            height: 1px;
+            background: var(--txt-30);
+        }
+        .hero h1 {
+            color: var(--txt);
+            margin-bottom: 20px;
+        }
+        .hero h1 em {
+            font-style: italic;
+            color: var(--txt-60);
+        }
+        .hero-body {
+            font-size: .97rem;
+            color: var(--txt-60);
+            line-height: 1.8;
+            max-width: 460px;
+            margin-bottom: 36px;
+        }
+        .hero-btns {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+        }
+        .hero-proof {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 18px;
+            padding-top: 28px;
+            border-top: 1px solid var(--bd-dark);
+        }
+        .proof-item {
+            font-size: .73rem;
+            color: var(--txt-30);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+        .proof-item::before {
+            content: '';
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--green);
+            flex-shrink: 0;
+        }
+
+        /* hero image placeholder */
+        .hero-img {
+            border-radius: 8px;
+            overflow: hidden;
+            aspect-ratio: 4/5;
+            border: 1px solid var(--bd-dark);
+            background: var(--ink-3);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            text-align: center;
+            padding: 28px;
+        }
+        .hero-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        .hero-img-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 8px;
+            border: 1px dashed var(--bd-dark-hi);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--txt-30);
+        }
+        .hero-img-text {
+            font-size: .73rem;
+            color: var(--txt-30);
+            line-height: 1.7;
+        }
+        .hero-img-text code {
+            color: var(--green);
+            font-size: .7rem;
+            background: var(--ink-2);
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+
+        /* ─────────────────────────────────────────
+           METRICS STRIP  (dark)
+        ───────────────────────────────────────── */
+        .metrics {
+            background: var(--ink-2);
+            border-bottom: 1px solid var(--bd-dark);
+        }
+        .metrics-row {
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 0 5%;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            border-left: 1px solid var(--bd-dark);
+        }
+        .metric-cell {
+            padding: 26px 24px;
+            border-right: 1px solid var(--bd-dark);
+        }
+        .metric-num {
+            font-family: var(--serif);
+            font-size: 2rem;
+            font-weight: 400;
+            color: var(--txt);
+            line-height: 1;
+            margin-bottom: 5px;
+        }
+        .metric-lbl {
+            font-size: .72rem;
+            color: var(--txt-30);
+            line-height: 1.5;
+        }
+
+        /* ─────────────────────────────────────────
+           PROBLEM SECTION  (dark)
+        ───────────────────────────────────────── */
+        .problem-layout {
+            max-width: 1080px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 72px;
+        }
+        .prob-item {
+            padding: 22px 0;
+            border-top: 1px solid var(--bd-dark);
+        }
+        .prob-item:last-child {
+            border-bottom: 1px solid var(--bd-dark);
+        }
+        .prob-n {
+            font-size: .62rem;
+            font-weight: 700;
+            letter-spacing: .1em;
+            color: var(--txt-30);
+            margin-bottom: 9px;
+        }
+        .prob-item h3 {
+            color: var(--txt);
+            font-size: .88rem;
+            margin-bottom: 7px;
+        }
+        .prob-item p {
+            font-size: .82rem;
+            color: var(--txt-30);
+            line-height: 1.72;
+        }
+
+        /* ─────────────────────────────────────────
+           HOW WE WORK  (light)
+        ───────────────────────────────────────── */
+        .how-sec {
+            background: var(--paper);
+            border-top: 1px solid var(--paper-bd);
+            border-bottom: 1px solid var(--paper-bd);
+        }
+        .how-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1px;
+            background: var(--paper-bd);
+            border: 1px solid var(--paper-bd);
+            margin-top: 48px;
+        }
+        .how-card {
+            background: var(--paper);
+            padding: 32px 26px;
+            transition: background .2s;
+            display: flex;
+            flex-direction: column;
+        }
+        .how-card:hover {
+            background: #fff;
+        }
+        .how-num {
+            font-family: var(--serif);
+            font-size: 2.4rem;
+            font-weight: 400;
+            color: #e0e0e0;
+            line-height: 1;
+            margin-bottom: 18px;
+        }
+        .how-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--r);
+            background: var(--green-bg);
+            border: 1px solid var(--green-bd);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 18px;
+        }
+        .how-icon svg {
+            width: 19px;
+            height: 19px;
+            stroke: var(--green-dk);
+            fill: none;
+            stroke-width: 1.8;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+        .how-card h3 {
+            color: var(--ink-lt);
+            font-size: .88rem;
+            margin-bottom: 10px;
+        }
+        .how-card p {
+            font-size: .81rem;
+            color: var(--ink-lt-60);
+            line-height: 1.72;
+            flex: 1;
+            margin-bottom: 14px;
+        }
+        .how-tag {
+            display: inline-block;
+            padding: 3px 9px;
+            border-radius: 3px;
+            background: var(--green-bg);
+            border: 1px solid var(--green-bd);
+            font-size: .63rem;
+            font-weight: 700;
+            letter-spacing: .07em;
+            text-transform: uppercase;
+            color: var(--green-dk);
+            align-self: flex-start;
+        }
+
+        /* ─────────────────────────────────────────
+           PRODUCT CARDS  (dark)
+        ───────────────────────────────────────── */
+        .prod-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            margin-top: 48px;
+            border: 1px solid var(--bd-dark);
+        }
+        .prod-card {
+            padding: 34px 28px;
+            border-right: 1px solid var(--bd-dark);
+            cursor: pointer;
+            transition: background .2s;
+            display: flex;
+            flex-direction: column;
+        }
+        .prod-card:last-child {
+            border-right: none;
+        }
+        .prod-card:hover {
+            background: var(--ink-2);
+        }
+        .prod-n {
+            font-size: .61rem;
+            font-weight: 700;
+            letter-spacing: .12em;
+            color: var(--txt-30);
+            margin-bottom: 14px;
+        }
+        .prod-card h3 {
+            font-family: var(--serif);
+            font-size: 1.15rem;
+            font-weight: 500;
+            color: var(--txt);
+            margin-bottom: 10px;
+        }
+        .prod-card p {
+            font-size: .81rem;
+            color: var(--txt-30);
+            line-height: 1.72;
+            flex: 1;
+            margin-bottom: 16px;
+        }
+        .prod-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-bottom: 18px;
+        }
+        .chip-dk {
+            padding: 3px 8px;
+            border-radius: 3px;
+            border: 1px solid var(--bd-dark);
+            font-size: .63rem;
+            font-weight: 500;
+            color: var(--txt-30);
+        }
+        .prod-arrow {
+            font-size: .79rem;
+            color: var(--txt-30);
+            transition: all .2s;
+            display: inline-block;
+        }
+        .prod-card:hover .prod-arrow {
+            color: var(--green);
+            transform: translateX(4px);
+        }
+
+        /* ─────────────────────────────────────────
+           BRAND MARQUEE  (dark)
+        ───────────────────────────────────────── */
+        .marquee {
+            overflow: hidden;
+            border-top: 1px solid var(--bd-dark);
+            border-bottom: 1px solid var(--bd-dark);
+            padding: 22px 0;
+            background: var(--ink-2);
+        }
+        .marquee-track {
+            display: flex;
+            gap: 0;
+            width: max-content;
+            animation: scroll 44s linear infinite;
+        }
+        .marquee-track:hover {
+            animation-play-state: paused;
+        }
+        @keyframes scroll {
+            from {
+                transform: translateX(0);
+            }
+            to {
+                transform: translateX(-50%);
+            }
+        }
+        .m-b {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 120px;
+            height: 40px;
+            padding: 0 20px;
+            font-size: .73rem;
+            font-weight: 500;
+            color: var(--txt-30);
+            border-right: 1px solid var(--bd-dark);
+            white-space: nowrap;
+            letter-spacing: .04em;
+            transition: color .2s;
+        }
+        .m-b:hover {
+            color: var(--txt-60);
+        }
+
+        /* ─────────────────────────────────────────
+           CTA STRIP  (dark)
+        ───────────────────────────────────────── */
+        .cta {
+            padding: 88px 5%;
+            text-align: center;
+            border-top: 1px solid var(--bd-dark);
+            position: relative;
+            overflow: hidden;
+        }
+        .cta::before {
+            content: '';
+            position: absolute;
+            top: -80px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 560px;
+            height: 560px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(34, 197, 94, .07), transparent 70%);
+            pointer-events: none;
+        }
+        .cta-inner {
+            max-width: 500px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        .cta-inner h2 {
+            color: var(--txt);
+            margin-bottom: 14px;
+        }
+        .cta-inner p {
+            margin-bottom: 32px;
+        }
+        .cta-row {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* ─────────────────────────────────────────
+           PRODUCT PAGE HERO  (dark)
+        ───────────────────────────────────────── */
+        .ph {
+            padding: 72px 5% 64px;
+            border-bottom: 1px solid var(--bd-dark);
+        }
+        .ph-inner {
+            max-width: 1080px;
+            margin: 0 auto;
+        }
+        .ph-tag {
+            display: inline-block;
+            padding: 4px 11px;
+            border-radius: 3px;
+            background: var(--green-bg);
+            border: 1px solid var(--green-bd);
+            font-size: .64rem;
+            font-weight: 700;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            color: var(--green);
+            margin-bottom: 18px;
+        }
+        .ph h1 {
+            color: var(--txt);
+            margin-bottom: 14px;
+            max-width: 640px;
+        }
+        .ph p {
+            margin-bottom: 28px;
+            max-width: 520px;
+        }
+        .ph-btns {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        /* ─────────────────────────────────────────
+           BRAND GRID  (light) with logo placeholders
+        ───────────────────────────────────────── */
+        .brand-sec {
+            background: var(--paper);
+            border-top: 1px solid var(--paper-bd);
+            border-bottom: 1px solid var(--paper-bd);
+        }
+        .brand-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1px;
+            background: var(--paper-bd);
+            border: 1px solid var(--paper-bd);
+            margin-top: 44px;
+        }
+        .brand-cell {
+            background: var(--paper);
+            padding: 20px 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            text-align: center;
+            transition: background .18s;
+            min-height: 110px;
+            justify-content: center;
+        }
+        .brand-cell:hover {
+            background: #fff;
+        }
+
+        /* logo placeholder box */
+        .logo-box {
+            width: 92px;
+            height: 42px;
+            border: 1.5px dashed var(--paper-bd);
+            border-radius: 4px;
+            background: var(--paper-2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: border-color .2s;
+            position: relative;
+            overflow: hidden;
+        }
+        .brand-cell:hover .logo-box {
+            border-color: #c0c0c0;
+        }
+        /* shows when image NOT loaded */
+        .logo-box-ph {
+            font-size: .58rem;
+            font-weight: 700;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            color: var(--ink-lt-30);
+            user-select: none;
+        }
+        /* actual image inside logo box */
+        .logo-box img {
+            width: 80px;
+            height: 36px;
+            object-fit: contain;
+            filter: grayscale(1) opacity(.5);
+            transition: filter .2s;
+            position: absolute;
+            inset: 0;
+            margin: auto;
+        }
+        .logo-box img.loaded {
+            display: block;
+        }
+        .logo-box img.loaded~.logo-box-ph {
+            display: none;
+        }
+        .brand-cell:hover .logo-box img {
+            filter: grayscale(0) opacity(.85);
+        }
+
+        .brand-name {
+            font-size: .73rem;
+            font-weight: 600;
+            color: var(--ink-lt-60);
+        }
+        .brand-origin {
+            font-size: .62rem;
+            color: var(--ink-lt-30);
+        }
+
+        /* divider label between intl and local brands */
+        .brand-section-label {
+            grid-column: 1 / -1;
+            background: var(--paper-2);
+            padding: 8px 16px;
+            font-size: .62rem;
+            font-weight: 700;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            color: var(--ink-lt-30);
+            border-top: 1px solid var(--paper-bd);
+        }
+
+        /* ─────────────────────────────────────────
+           TYPES GRID  (light)
+        ───────────────────────────────────────── */
+        .types-sec {
+            background: var(--paper);
+            border-top: 1px solid var(--paper-bd);
+        }
+        .types-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(248px, 1fr));
+            gap: 1px;
+            background: var(--paper-bd);
+            border: 1px solid var(--paper-bd);
+            margin-top: 44px;
+        }
+        .type-cell {
+            background: var(--paper);
+            padding: 26px 22px;
+            transition: background .18s;
+        }
+        .type-cell:hover {
+            background: #fff;
+        }
+        .type-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: var(--r);
+            background: var(--green-bg);
+            border: 1px solid var(--green-bd);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: .95rem;
+            margin-bottom: 12px;
+        }
+        .type-cell h3 {
+            font-size: .86rem;
+            color: var(--ink-lt);
+            margin-bottom: 7px;
+        }
+        .type-cell p {
+            font-size: .79rem;
+            color: var(--ink-lt-60);
+            line-height: 1.68;
+        }
+
+        /* ─────────────────────────────────────────
+           BUYER'S GUIDE  (light)
+        ───────────────────────────────────────── */
+        .guide-sec {
+            background: var(--paper);
+            border-top: 1px solid var(--paper-bd);
+            border-bottom: 1px solid var(--paper-bd);
+        }
+        .guide-list {
+            max-width: 740px;
+            margin-top: 44px;
+        }
+        .guide-item {
+            display: grid;
+            grid-template-columns: 48px 1fr;
+            gap: 18px;
+            padding: 26px 0;
+            border-top: 1px solid var(--paper-bd);
+            align-items: start;
+        }
+        .guide-item:last-child {
+            border-bottom: 1px solid var(--paper-bd);
+        }
+        .guide-n {
+            font-family: var(--serif);
+            font-size: 1.6rem;
+            font-weight: 400;
+            color: #dedede;
+            line-height: 1;
+            padding-top: 3px;
+        }
+        .guide-body h3 {
+            font-size: .88rem;
+            color: var(--ink-lt);
+            margin-bottom: 7px;
+        }
+        .guide-body p {
+            font-size: .82rem;
+            color: var(--ink-lt-60);
+            line-height: 1.72;
+        }
+        .guide-tip {
+            display: block;
+            margin-top: 10px;
+            padding: 8px 14px;
+            border-left: 2.5px solid var(--green);
+            background: var(--green-bg);
+            font-size: .73rem;
+            color: var(--ink-lt-60);
+            line-height: 1.6;
+        }
+
+        /* viscosity table */
+        .vtable {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 28px;
+            font-size: .8rem;
+        }
+        .vtable th {
+            padding: 9px 14px;
+            text-align: left;
+            font-size: .67rem;
+            font-weight: 700;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            color: var(--ink-lt-30);
+            background: var(--paper-2);
+            border-bottom: 1px solid var(--paper-bd);
+        }
+        .vtable td {
+            padding: 10px 14px;
+            color: var(--ink-lt-60);
+            border-bottom: 1px solid var(--paper-bd);
+        }
+        .vtable tr:hover td {
+            background: rgba(34, 197, 94, .05);
+        }
+        .vtable td:first-child {
+            color: var(--ink-lt);
+            font-weight: 600;
+        }
+
+        /* ─────────────────────────────────────────
+           CONTACT  (light form + dark aside)
+        ───────────────────────────────────────── */
+        .contact-sec {
+            background: var(--paper);
+            border-top: 1px solid var(--paper-bd);
+            border-bottom: 1px solid var(--paper-bd);
+        }
+        .contact-layout {
+            max-width: 1080px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 360px;
+            gap: 64px;
+            align-items: start;
+        }
+        .c-form {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .c-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+        .fld {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .fld label {
+            font-size: .7rem;
+            font-weight: 700;
+            letter-spacing: .07em;
+            text-transform: uppercase;
+            color: var(--ink-lt-60);
+        }
+        .fld input,
+        .fld select,
+        .fld textarea {
+            background: #fff;
+            border: 1.5px solid var(--paper-bd);
+            border-radius: var(--r);
+            padding: 11px 14px;
+            font-family: var(--sans);
+            font-size: .86rem;
+            color: var(--ink-lt);
+            outline: none;
+            width: 100%;
+            transition: border-color .2s, box-shadow .2s;
+        }
+        .fld input:focus,
+        .fld select:focus,
+        .fld textarea:focus {
+            border-color: var(--green);
+            box-shadow: 0 0 0 3px rgba(34, 197, 94, .1);
+        }
+        .fld input::placeholder,
+        .fld textarea::placeholder {
+            color: #c8c8c8;
+        }
+        .fld select option {
+            background: #fff;
+        }
+        .fld textarea {
+            resize: vertical;
+            min-height: 110px;
+        }
+        .c-footer {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex-wrap: wrap;
+            margin-top: 4px;
+        }
+        .c-note {
+            font-size: .71rem;
+            color: var(--ink-lt-30);
+        }
+
+        #c-ok {
+            display: none;
+            padding: 14px 18px;
+            border-radius: var(--r);
+            background: var(--green-bg);
+            border: 1px solid var(--green-bd);
+            color: var(--green-dk);
+            font-size: .85rem;
+            font-weight: 500;
+            margin-bottom: 18px;
+        }
+        #c-err {
+            display: none;
+            padding: 14px 18px;
+            border-radius: var(--r);
+            background: #fef2f2;
+            border: 1px solid #fca5a5;
+            color: #b91c1c;
+            font-size: .85rem;
+            margin-bottom: 18px;
+        }
+
+        .c-aside {
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+            position: sticky;
+            top: 76px;
+        }
+        .c-block {
+            background: var(--ink-2);
+            border: 1px solid var(--bd-dark);
+            padding: 22px;
+            margin-bottom: 1px;
+        }
+        .c-block:first-child {
+            border-radius: var(--r) var(--r) 0 0;
+        }
+        .c-block:last-child {
+            border-radius: 0 0 var(--r) var(--r);
+        }
+        .c-block h3 {
+            font-size: .85rem;
+            color: var(--txt);
+            margin-bottom: 6px;
+        }
+        .c-block p {
+            font-size: .79rem;
+            color: var(--txt-30);
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+        .c-block a {
+            font-size: .86rem;
+            font-weight: 700;
+            color: var(--green);
+            transition: opacity .2s;
+        }
+        .c-block a:hover {
+            opacity: .8;
+            text-decoration: underline;
+        }
+        .c-resp {
+            font-size: .67rem;
+            color: var(--txt-30);
+            margin-top: 6px;
+            display: block;
+        }
+        .c-hint {
+            background: var(--ink-3);
+            border: 1px solid var(--bd-dark);
+            border-radius: var(--r);
+            padding: 18px;
+            margin-top: 12px;
+        }
+        .c-hint p {
+            font-size: .74rem;
+            color: var(--txt-30);
+            line-height: 1.65;
+        }
+        .c-hint strong {
+            color: var(--txt-60);
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        /* ─────────────────────────────────────────
+           FOOTER
+        ───────────────────────────────────────── */
+        footer {
+            background: var(--ink-2);
+            border-top: 1px solid var(--bd-dark);
+            padding: 52px 5% 32px;
+        }
+        .footer-inner {
+            max-width: 1080px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 48px;
+            padding-bottom: 40px;
+            border-bottom: 1px solid var(--bd-dark);
+            margin-bottom: 28px;
+        }
+        .f-logo {
+            font-family: var(--serif);
+            font-size: 1.15rem;
+            font-weight: 500;
+            margin-bottom: 12px;
+        }
+        .f-logo span {
+            color: var(--green);
+        }
+        .f-desc {
+            font-size: .77rem;
+            color: var(--txt-30);
+            line-height: 1.7;
+            max-width: 240px;
+        }
+        .f-col-h {
+            font-size: .62rem;
+            font-weight: 700;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+            color: var(--txt-30);
+            margin-bottom: 14px;
+        }
+        .f-links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .f-links li button,
+        .f-links li a {
+            font-size: .79rem;
+            color: var(--txt-30);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-family: var(--sans);
+            padding: 0;
+            transition: color .2s;
+            text-align: left;
+        }
+        .f-links li button:hover,
+        .f-links li a:hover {
+            color: var(--txt-60);
+        }
+        .f-bottom {
+            max-width: 1080px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .f-copy {
+            font-size: .71rem;
+            color: var(--txt-30);
+        }
+
+        /* ─────────────────────────────────────────
+           FLOATING WA BUTTON
+        ───────────────────────────────────────── */
+        .wa-float {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 400;
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: #1dab5f;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 18px rgba(0, 0, 0, .4);
+            transition: all .25s;
+        }
+        .wa-float:hover {
+            background: #18984f;
+            transform: scale(1.08);
+        }
+        .wa-float svg {
+            width: 26px;
+            height: 26px;
+            fill: #fff;
+        }
+
+        /* ─────────────────────────────────────────
+           REVEAL ON SCROLL
+        ───────────────────────────────────────── */
+        .reveal {
+            opacity: 0;
+            transform: translateY(16px);
+            transition: opacity .58s ease, transform .58s ease;
+        }
+        .reveal.in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ─────────────────────────────────────────
+           RESPONSIVE
+        ───────────────────────────────────────── */
+        @media (max-width: 900px) {
+            .hero-inner {
+                grid-template-columns: 1fr;
+            }
+            .hero-img {
+                display: none;
+            }
+            .metrics-row {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .problem-layout {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+            .how-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .prod-grid {
+                grid-template-columns: 1fr;
+            }
+            .prod-card {
+                border-right: none;
+                border-bottom: 1px solid var(--bd-dark);
+            }
+            .contact-layout {
+                grid-template-columns: 1fr;
+            }
+            .c-row {
+                grid-template-columns: 1fr;
+            }
+            .footer-inner {
+                grid-template-columns: 1fr 1fr;
+            }
+            .nav-links {
+                display: none;
+            }
+        }
+        @media (max-width: 520px) {
+            .how-grid {
+                grid-template-columns: 1fr;
+            }
+            .metrics-row {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ═══════ NAV ═══════ -->
+    <nav>
+        <div class="logo" onclick="go('home')">
+            <span class="logo-f">Field</span><span class="logo-p">Price</span>
+        </div>
+        <ul class="nav-links">
+            <li><button class="active" onclick="go('home',this)">Home</button></li>
+            <li><button onclick="go('lubricants',this)">Lubricants</button></li>
+            <li><button onclick="go('belts',this)">Belt Drives</button></li>
+            <li><button onclick="go('bearings',this)">Bearings</button></li>
+            <li><button onclick="go('contact',this)">Contact</button></li>
+        </ul>
+        <button class="btn btn-green" style="padding:8px 20px;font-size:.82rem" onclick="go('contact')">Get a Quote</button>
+    </nav>
+
+
+    <!-- ═══════════════════════════════════
+         HOME PAGE
+    ═══════════════════════════════════ -->
+    <div id="page-home" class="page active">
+
+        <!-- HERO -->
+        <section class="hero">
+            <div class="hero-inner">
+                <div>
+                    <div class="hero-kicker">Built by Sales Engineers</div>
+                    <h1>You are paying more<br />than you should<br /><em>for the same product.</em></h1>
+                    <p class="hero-body">After years inside industrial distribution, we saw the same lubricants, belts and bearings quoted at vastly different prices to different buyers. The product was identical. Only the buyer's awareness differed. We exist to close that gap.</p>
+                    <div class="hero-btns">
+                        <a href="https://wa.me/919535657931?text=Hi%2C+I+need+a+price+quote" class="btn btn-wa btn-lg" target="_blank">
+                            <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                            WhatsApp Us
+                        </a>
+                        <button class="btn btn-ghost-dk btn-lg" onclick="go('contact')">Submit a Requirement</button>
+                    </div>
+                    <div class="hero-proof">
+                        <span class="proof-item">6+ years in industrial distribution</span>
+                        <span class="proof-item">Authorised sourcing only</span>
+                        <span class="proof-item">Verified quote by end of business day</span>
+                    </div>
+                </div>
+
+                <!-- HERO IMAGE -->
+                <div class="hero-img" id="heroImgWrap">
+                    <img src="./assets/hero/hero.png" alt="Industrial facility — factory floor with heavy machinery" onload="this.style.display='block';document.getElementById('heroImgWrap').style.padding='0';document.getElementById('heroImgWrap').style.background='transparent';this.style.width='100%';this.style.height='100%'" onerror="this.style.display='none'" style="display:none" />
+                    <div class="hero-img-icon">🏭</div>
+             </div>
+            </div>
+        </section>
+
+        <!-- METRICS -->
+        <div class="metrics">
+            <div class="metrics-row">
+                <div class="metric-cell"><div class="metric-num">6+</div><div class="metric-lbl">Years in industrial<br />distribution</div></div>
+                <div class="metric-cell"><div class="metric-num">20+</div><div class="metric-lbl">Brands in our<br />sourcing network</div></div>
+                <div class="metric-cell"><div class="metric-num">3</div><div class="metric-lbl">Product categories<br />we specialise in</div></div>
+                <div class="metric-cell"><div class="metric-num">End of Day</div><div class="metric-lbl">Verified quote every<br />same business day</div></div>
+            </div>
+        </div>
+
+        <!-- PROBLEM -->
+        <section class="sec">
+            <div class="problem-layout wrap">
+                <div>
+                    <div class="eyebrow eyebrow-dk">The Problem</div>
+                    <h2 style="color:var(--txt)">Industrial MRO pricing has no transparency.</h2>
+                    <div class="rule-dk"></div>
+                    <p class="lead-dk" style="max-width:380px">We spent years on the distribution side. We know exactly how margins are applied, when quotes are inflated, and which buyers are consistently overcharged. That knowledge now works for the buyer.</p>
+                </div>
+                <div>
+                    <div class="prob-item reveal">
+                        <div class="prob-n">01 —</div>
+                        <h3>No price reference exists</h3>
+                        <p>There is no public index for industrial lubricant, belt or bearing pricing in India. Buyers accept whatever they are quoted, with no benchmark to validate it.</p>
+                    </div>
+                    <div class="prob-item reveal">
+                        <div class="prob-n">02 —</div>
+                        <h3>Large buyers often pay more, not less</h3>
+                        <p>Procurement is delegated to staff who do not question prices. Distributors recognise this and price accordingly. Volume alone does not earn a better rate.</p>
+                    </div>
+                    <div class="prob-item reveal">
+                        <div class="prob-n">03 —</div>
+                        <h3>The same product can vary 25–40%</h3>
+                        <p>Identical product, identical brand, same week — quoted at dramatically different prices to different buyers. Awareness is the only variable that changes the outcome.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- HOW WE WORK -->
+        <section class="how-sec sec">
+            <div class="wrap">
+                <div class="eyebrow eyebrow-lt">How We Work</div>
+                <h2 style="color:var(--ink-lt)">Four steps from your requirement<br />to a verified quote.</h2>
+                <div class="rule-lt"></div>
+                <p class="lead-lt" style="max-width:520px">No portal to register on. You tell us what you need — we do the sourcing work — and by end of the same business day you have a verified price to compare against what you currently pay.</p>
+                <div class="how-grid">
+                    <div class="how-card reveal">
+                        <div class="how-num">01</div>
+                        <div class="how-icon"><svg viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4z" /></svg></div>
+                        <h3>You share your requirement.</h3>
+                        <p>Send us the product type, grade, quantity and brand preference via WhatsApp or our contact form. If you are unsure of the specification, describing the machine and application is sufficient to start.</p>
+                        <span class="how-tag">WhatsApp or Contact Form</span>
+                    </div>
+                    <div class="how-card reveal">
+                        <div class="how-num">02</div>
+                        <div class="how-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35M11 8v6M8 11h6" /></svg></div>
+                        <h3>We verify the specification.</h3>
+                        <p>Our engineers review your requirement to confirm the correct product grade for your application. If we find a spec issue — wrong grade, incompatible type, missing OEM approval — we flag it before you spend a rupee.</p>
+                        <span class="how-tag">Spec Check · Application Review</span>
+                    </div>
+                    <div class="how-card reveal">
+                        <div class="how-num">03</div>
+                        <div class="how-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="2" /><circle cx="4" cy="6" r="2" /><circle cx="20" cy="6" r="2" /><circle cx="4" cy="18" r="2" /><circle cx="20" cy="18" r="2" /><path d="M6 6h4M14 6h4M6 18h4M14 18h4M12 10v4" /></svg></div>
+                        <h3>We source across our network.</h3>
+                        <p>We approach our verified network of authorised distributors. Because we understand distributor margins from years inside the channel, we know what a fair market price looks like — and we hold our network to it.</p>
+                        <span class="how-tag">50+ Distributors · Pan-India</span>
+                    </div>
+                    <div class="how-card reveal">
+                        <div class="how-num">04</div>
+                        <div class="how-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" /><polyline points="14 2 14 8 20 8" /><polyline points="9 15 11 17 15 13" /></svg></div>
+                        <h3>You receive a verified quote.</h3>
+                        <p>Product name, brand, full specification, quantity, unit price and total — by end of the same business day. No hidden charges. No obligation. Compare it with what you currently pay and decide for yourself.</p>
+                        <span class="how-tag">Same Day · No Obligation</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PRODUCTS -->
+        <section class="sec" style="border-top:1px solid var(--bd-dark)">
+            <div class="wrap">
+                <div class="eyebrow eyebrow-dk">What We Source</div>
+                <h2 style="color:var(--txt)">Three categories. Every major brand.</h2>
+                <div class="rule-dk"></div>
+                <p class="lead-dk" style="max-width:480px">Authorised sourcing only. Every product is genuine, manufacturer-traceable and priced at what the market actually charges.</p>
+                <div class="prod-grid reveal">
+                    <div class="prod-card" onclick="go('lubricants')">
+                        <div class="prod-n">01 —</div>
+                        <h3>Lubricants</h3>
+                        <p>Hydraulic oils, gear oils, engine oils, greases, compressor fluids and specialty lubricants for every industrial application.</p>
+                        <div class="prod-chips">
+                            <span class="chip-dk">Shell</span><span class="chip-dk">Mobil</span><span class="chip-dk">Castrol</span>
+                            <span class="chip-dk">Gulf</span><span class="chip-dk">Total</span><span class="chip-dk">Fuchs</span>
+                        </div>
+                        <div class="prod-arrow">Explore →</div>
+                    </div>
+                    <div class="prod-card" onclick="go('belts')">
+                        <div class="prod-n">02 —</div>
+                        <h3>Belt Drives</h3>
+                        <p>V-belts, timing belts, flat belts and ribbed belts for industrial power transmission and drive systems of all capacities.</p>
+                        <div class="prod-chips">
+                            <span class="chip-dk">Gates</span><span class="chip-dk">Continental</span><span class="chip-dk">Fenner</span>
+                            <span class="chip-dk">Optibelt</span><span class="chip-dk">Bando</span><span class="chip-dk">PIX</span>
+                        </div>
+                        <div class="prod-arrow">Explore →</div>
+                    </div>
+                    <div class="prod-card" onclick="go('bearings')">
+                        <div class="prod-n">03 —</div>
+                        <h3>Bearings</h3>
+                        <p>Ball, roller, tapered, spherical and thrust bearings from the world's most trusted precision engineering manufacturers.</p>
+                        <div class="prod-chips">
+                            <span class="chip-dk">SKF</span><span class="chip-dk">NSK</span><span class="chip-dk">FAG</span>
+                            <span class="chip-dk">Timken</span><span class="chip-dk">NTN</span><span class="chip-dk">NBC</span>
+                        </div>
+                        <div class="prod-arrow">Explore →</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- MARQUEE -->
+        <div class="marquee">
+            <div class="marquee-track">
+                <span class="m-b">Shell</span><span class="m-b">Mobil</span><span class="m-b">Castrol</span><span class="m-b">Gulf Oil</span><span class="m-b">Total Energies</span><span class="m-b">Fuchs</span><span class="m-b">Klüber</span><span class="m-b">Servo</span><span class="m-b">HP Lubricants</span><span class="m-b">MAK</span><span class="m-b">Gates</span><span class="m-b">Continental</span><span class="m-b">Fenner</span><span class="m-b">Optibelt</span><span class="m-b">Bando</span><span class="m-b">PIX</span><span class="m-b">SKF</span><span class="m-b">NSK</span><span class="m-b">FAG</span><span class="m-b">Timken</span><span class="m-b">NTN</span><span class="m-b">NBC</span><span class="m-b">NRB</span>
+                <span class="m-b">Shell</span><span class="m-b">Mobil</span><span class="m-b">Castrol</span><span class="m-b">Gulf Oil</span><span class="m-b">Total Energies</span><span class="m-b">Fuchs</span><span class="m-b">Klüber</span><span class="m-b">Servo</span><span class="m-b">HP Lubricants</span><span class="m-b">MAK</span><span class="m-b">Gates</span><span class="m-b">Continental</span><span class="m-b">Fenner</span><span class="m-b">Optibelt</span><span class="m-b">Bando</span><span class="m-b">PIX</span><span class="m-b">SKF</span><span class="m-b">NSK</span><span class="m-b">FAG</span><span class="m-b">Timken</span><span class="m-b">NTN</span><span class="m-b">NBC</span><span class="m-b">NRB</span>
+            </div>
+        </div>
+
+        <!-- CTA -->
+        <section class="cta">
+            <div class="cta-inner reveal">
+                <div class="eyebrow eyebrow-dk" style="text-align:center;margin-bottom:12px">Get Started</div>
+                <h2 style="color:var(--txt)">Send us what you need.<br />We respond today.</h2>
+                <p class="lead-dk" style="margin-top:14px">No registration. No portal. Share your requirement via WhatsApp or our contact form — verified market price by end of the same business day.</p>
+                <div class="cta-row">
+                    <a href="https://wa.me/919535657931?text=Hi%2C+I+need+a+price+quote" class="btn btn-wa btn-lg" target="_blank">
+                        <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                        WhatsApp Now
+                    </a>
+                    <button class="btn btn-ghost-dk btn-lg" onclick="go('contact')">Submit a Requirement</button>
+                </div>
+            </div>
+        </section>
+
+    </div>
+    <!-- /home -->
+
+
+    <!-- ═══════════════════════════════════
+         LUBRICANTS PAGE
+    ═══════════════════════════════════ -->
+    <div id="page-lubricants" class="page">
+
+        <section class="ph">
+            <div class="ph-inner">
+                <span class="ph-tag">Lubricants</span>
+                <h1>Industrial lubricants at<br />verified market prices.</h1>
+                <p class="lead-dk">Hydraulic oils, gear oils, greases, compressor fluids and specialty lubricants — sourced through authorised distributors and priced at what the market actually charges.</p>
+                <div class="ph-btns">
+                    <a href="https://wa.me/919535657931?text=Lubricant+price+quote" class="btn btn-green" target="_blank">Get Lubricant Quote</a>
+                    <button class="btn btn-ghost-dk" onclick="go('contact')">Submit Requirement</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- BRAND GRID -->
+        <section class="brand-sec sec">
+            <div class="wrap">
+                <div class="eyebrow eyebrow-lt">Brand Network</div>
+                <h2 style="color:var(--ink-lt)">Every major lubricant brand.<br />Authorised sourcing only.</h2>
+                <div class="rule-lt"></div>
+                <div class="brand-grid">
+                    <!-- International Brands -->
+                    <div class="brand-section-label">International Brands</div>
+                    <div class="brand-cell"><div class="logo-box"><img src="./assets/brand/shell.svg" alt="Shell logo" onload="this.classList.add('loaded')" onerror="this.style.display='none'" /><span class="logo-box-ph">shell.svg</span></div><div class="brand-name">Shell</div><div class="brand-origin">Netherlands · UK</div></div>
+                    <div class="brand-cell"><div class="logo-box"><img src="./assets/brand/mobil.svg" alt="Mobil logo" onload="this.classList.add('loaded')" onerror="this.style.display='none'" /><span class="logo-box-ph">mobil.svg</span></div><div class="brand-name">Mobil</div><div class="brand-origin">USA</div></div>
+                    <div class="brand-cell"><div class="logo-box"><img src="./assets/brand/castrol.svg" alt="Castrol logo" onload="this.classList.add('loaded')" onerror="this.style.display='none'" /><span class="logo-box-ph">castrol.svg</span></div><div class="brand-name">Castrol</div><div class="brand-origin">UK · BP Group</div></div>
+                    <div class="brand-cell"><div class="logo-box"><img src="./assets/brand/gulf.svg" alt="Gulf Oil logo" onload="this.classList.add('loaded')" onerror="this.style.display='none'" /><span class="logo-box-ph">gulf.svg</span></div><div class="brand-name">Gulf Oil</div><div class="brand-origin">USA</div></div>
+                    <div class="brand-cell"><div class="logo-box"><img src="./assets/brand/total.svg" alt="Total Energies logo" onload="this.classList.add('loaded')" onerror="this.style.display='none'" /><span class="logo-box-ph">total.svg</span></div><div class="brand-name">Total Energies</div><div class="brand-origin">France</div></div>
+                    <div class="brand-cell"><div class="logo-box"><img src="./assets/brand/fuchs.svg" alt="Fuchs logo" onload="this.classList.add('loaded')" onerror="this.style.display='none'" /><span class="logo-box-ph">fuchs.svg</span></div><div class="brand-name">Fuchs</div><div class="brand-origin">Germany</div></div>
+                    <div class="brand-cell"><div class="logo-box"><img src="./assets/brand/kluber.png" alt="Klüber logo" onload="this.classList.add('loaded')" onerror="this.style.display='none'" /><span class="logo-box-ph">kluber.png</span></div><div class="brand-name">Klüber</div><div class="brand-origin">Germany</div></div>
+                    <div class="brand-cell"><div class="logo-box"><img src="./assets/brand/chevron.svg" alt="Chevron logo" onload="this.classList.add('loaded')" onerror="this.style.display='none'" /><span class="logo-box-ph">chevron.svg</span></div><div class="brand-name">Chevron</div><div class="brand-origin">USA</div></div>
+                    <div class="brand-cell"><div class="logo-box"><img src="./assets/brand/q8.svg" alt="Q8 Oils logo" onload="this.classList.add('loaded')" onerror="this.style.display='none'" /><span class="logo-box-ph">q8.svg</span></div><div class="brand-name">Q8 Oils</div><div class="brand-origin">Kuwait</div></div>
+                    <div class="brand-cell"><div class="logo-box"><img src="./assets/brand/caltex.svg" alt="Caltex logo" onload="this.classList.add('loaded')" onerror="this.style.display='none'" /><span class="logo-box-ph">caltex.svg</span></div><div class="brand-name">Caltex</div><div class="brand-origin">USA</div></div>
+                    <!-- Indian Brands -->
+                    <div class="brand-section-label">Indian Brands</div>
+                    <div class="brand-cell"><div class="logo-box"><img src="./assets/brand/servo.png" alt="Servo (IOC) logo" onload="this.classList.add('loaded')" onerror="this.style.display='none'" /><span class="logo-box-ph">servo.png</span></div><div class="brand-name">Servo (IOC)</div><div class="brand-origin">India</div></div>
+                    <div class="brand-cell"><div class="logo-box"><img src="./assets/brand/hp.png" alt="HP Lubricants logo" onload="this.classList.add('loaded')" onerror="this.style.display='none'" /><span class="logo-box-ph">hp.png</span></div><div class="brand-name">HP Lubricants</div><div class="brand-origin">India · HPCL</div></div>
+                    <div class="brand-cell"><div class="logo-box"><img src="./assets/brand/mak.png" alt="MAK Lubricants logo" onload="this.classList.add('loaded')" onerror="this.style.display='none'" /><span class="logo-box-ph">mak.png</span></div><div class="brand-name">MAK Lubricants</div><div class="brand-origin">India · BPCL</div></div>
+                    <div class="brand-cell"><div class="logo-box"><img src="./assets/brand/veedol.svg" alt="Veedol logo" onload="this.classList.add('loaded')" onerror="this.style.display='none'" /><span class="logo-box-ph">veedol.svg</span></div><div class="brand-name">Veedol</div><div class="brand-origin">India</div></div>
+                    <div class="brand-cell"><div class="logo-box"><img src="./assets/brand/savita.png" alt="Savita Oil logo" onload="this.classList.add('loaded')" onerror="this.style.display='none'" /><span class="logo-box-ph">savita.png</span></div><div class="brand-name">Savita Oil</div><div class="brand-origin">India</div></div>
+                    <div class="brand-cell"><div class="logo-box"><img src="./assets/brand/panama.png" alt="Panama Petrochem logo" onload="this.classList.add('loaded')" onerror="this.style.display='none'" /><span class="logo-box-ph">panama.png</span></div><div class="brand-name">Panama Petrochem</div><div class="brand-origin">India</div></div>
+                    <div class="brand-cell"><div class="logo-box"><img src="./assets/brand/gandhar.png" alt="Gandhar Oil logo" onload="this.classList.add('loaded')" onerror="this.style.display='none'" /><span class="logo-box-ph">gandhar.png</span></div><div class="brand-name">Gandhar Oil</div><div class="brand-origin">India</div></div>
+                    <div class="brand-cell"><div class="logo-box"><img src="./assets/brand/apar.png" alt="Apar Industries logo" onload="this.classList.add('loaded')" onerror="this.style.display='none'" /><span class="logo-box-ph">apar.png</span></div><div class="brand-name">Apar Industries</div><div class="brand-origin">India</div></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- WHAT LUBRICANTS DO -->
+        <section class="types-sec sec">
+            <div class="wrap">
+                <div class="eyebrow eyebrow-lt">What Lubricants Do</div>
+                <h2 style="color:var(--ink-lt)">The six functions of industrial lubrication.</h2>
+                <div class="rule-lt"></div>
+                <p class="lead-lt" style="max-width:520px">The right lubricant does more than reduce friction. Using the wrong grade or type — even from a premium brand — can cost significantly more than any price saving.</p>
+                <div class="types-grid">
+                    <div class="type-cell reveal"><div class="type-icon">🛡️</div><h3>Reduces Friction &amp; Wear</h3><p>Creates a separating film between metal surfaces, extending component life by 3–10× compared to inadequate lubrication.</p></div>
+                    <div class="type-cell reveal"><div class="type-icon">🌡️</div><h3>Controls Temperature</h3><p>Carries heat away from bearings and hydraulic components. In high-speed systems, thermal management is as critical as friction reduction.</p></div>
+                    <div class="type-cell reveal"><div class="type-icon">🚫</div><h3>Prevents Corrosion</h3><p>Forms a protective barrier against moisture and atmospheric corrosion. Essential for equipment in humid or chemical environments.</p></div>
+                    <div class="type-cell reveal"><div class="type-icon">⚡</div><h3>Transmits Power</h3><p>In hydraulic systems, the oil is the working fluid. The wrong viscosity directly reduces machine power output and response speed.</p></div>
+                    <div class="type-cell reveal"><div class="type-icon">🧹</div><h3>Keeps Systems Clean</h3><p>Dispersant additives carry contaminants to filters. Incorrect oil leaves sludge deposits that block passages and accelerate wear.</p></div>
+                    <div class="type-cell reveal"><div class="type-icon">⏱️</div><h3>Reduces Downtime</h3><p>Correctly lubricated equipment runs longer between service intervals. Unplanned breakdowns cost 3–5× more than planned maintenance.</p></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- BUYING GUIDE -->
+        <section class="guide-sec sec">
+            <div class="wrap">
+                <div class="eyebrow eyebrow-lt">Buyer's Guide</div>
+                <h2 style="color:var(--ink-lt)">How to source the right lubricant at a fair price.</h2>
+                <div class="rule-lt"></div>
+                <div class="guide-list">
+                    <div class="guide-item reveal"><div class="guide-n">1</div><div class="guide-body"><h3>Identify the application first.</h3><p>The application determines the lubricant type — hydraulic system, gearbox, compressor, bearing housing or engine all require fundamentally different products. Substituting types because something is available is one of the most costly maintenance errors in industry.</p><span class="guide-tip">💡 Tip: Share the machine manual page — we will identify the correct type before quoting.</span></div></div>
+                    <div class="guide-item reveal"><div class="guide-n">2</div><div class="guide-body"><h3>Confirm the viscosity grade from the OEM manual.</h3><p>Viscosity grade — ISO VG 32, 46, 68 for industrial; SAE 10W-40 for engines — is always specified by the original equipment manufacturer. Never substitute grades without engineering confirmation. Consequences range from accelerated wear to complete machine damage.</p><span class="guide-tip">💡 Tip: ISO grades for industrial machines. SAE grades for automotive and engine applications.</span></div></div>
+                    <div class="guide-item reveal"><div class="guide-n">3</div><div class="guide-body"><h3>Check for OEM approval requirements.</h3><p>Imported equipment often requires lubricants meeting specific OEM approvals beyond viscosity — "Meets Bosch Rexroth HLP" or "Approved for Atlas Copco compressors." These must be matched precisely to preserve equipment warranties.</p><span class="guide-tip">💡 Tip: Share the OEM approval spec — we verify compliance before quoting any product.</span></div></div>
+                    <div class="guide-item reveal"><div class="guide-n">4</div><div class="guide-body"><h3>Calculate consumption and order in bulk.</h3><p>Full drums (208L) are consistently cheaper per litre than cartons or pails. If storage allows, buying in bulk is the single largest lever for reducing per-unit cost — independent of which distributor you use.</p><span class="guide-tip">💡 Tip: Share your annual consumption — we advise the optimal order size and frequency.</span></div></div>
+                    <div class="guide-item reveal"><div class="guide-n">5</div><div class="guide-body"><h3>Validate the price before you commit.</h3><p>The same product from the same brand can vary 25–40% across authorised distributors. Send us your current quote and the full specification — we will tell you exactly where it stands in the real market, without obligation.</p><span class="guide-tip">💡 Tip: Grade, quantity and current price is all we need. Verified comparison by end of day.</span></div></div>
+                </div>
+                <div style="margin-top:52px">
+                    <div class="eyebrow eyebrow-lt" style="margin-bottom:14px">Reference — Common ISO Viscosity Grades</div>
+                    <table class="vtable">
+                        <thead><tr><th>Grade</th><th>Typical Application</th><th>Common Products</th></tr></thead>
+                        <tbody>
+                            <tr><td>ISO VG 32</td><td>Hydraulic systems (light duty), air tools</td><td>Castrol Hyspin AWS 32, Gulf Harmony AW 32</td></tr>
+                            <tr><td>ISO VG 46</td><td>Hydraulic systems (standard)</td><td>Shell Tellus S2 MX 46, Mobil DTE 25</td></tr>
+                            <tr><td>ISO VG 68</td><td>Hydraulic (high temp), gearboxes</td><td>Total Azolla ZS 68, Castrol Hyspin AWS 68</td></tr>
+                            <tr><td>ISO VG 100</td><td>Machine tool spindles, enclosed gears</td><td>Shell Omala S2 GX 100, Mobil SHC 624</td></tr>
+                            <tr><td>ISO VG 220</td><td>Industrial gearboxes, worm drives</td><td>Shell Omala S2 GX 220, Mobil Gear 600</td></tr>
+                            <tr><td>ISO VG 320</td><td>Heavy gearboxes, steel mills</td><td>Total Carter SY 320, Klüber Lamora 320</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section class="cta"><div class="cta-inner reveal"><div class="eyebrow eyebrow-dk" style="text-align:center;margin-bottom:12px">Get a Quote</div><h2 style="color:var(--txt)">Tell us the grade and quantity.<br />We handle the rest.</h2><p class="lead-dk" style="margin-top:14px">Grade, quantity, brand preference and location. Verified market price by end of the same business day.</p><div class="cta-row" style="margin-top:28px"><a href="https://wa.me/919535657931?text=Lubricant+price+quote" class="btn btn-wa btn-lg" target="_blank">WhatsApp for Lubricant Quote</a><button class="btn btn-ghost-dk btn-lg" onclick="go('contact')">Submit via Form</button></div></div></section>
+
+    </div>
+    <!-- /lubricants -->
+
+
+    <!-- ═══════════════════════════════════
+         BELT DRIVES PAGE
+    ═══════════════════════════════════ -->
+    <div id="page-belts" class="page">
+
+        <section class="ph">
+            <div class="ph-inner">
+                <span class="ph-tag">Belt Drives</span>
+                <h1>Industrial drive belts at<br />verified market prices.</h1>
+                <p class="lead-dk">V-belts, timing belts, flat belts — the same belt part number can vary 30% across distributors. We verify the real price before you commit.</p>
+                <div class="ph-btns">
+                    <a href="https://wa.me/919535657931?text=Belt+drive+price+quote" class="btn btn-green" target="_blank">Get Belt Quote</a>
+                    <button class="btn btn-ghost-dk" onclick="go('contact')">Submit Requirement</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="brand-sec sec">
+            <div class="wrap">
+                <div class="eyebrow eyebrow-lt">Brand Network</div>
+                <h2 style="color:var(--ink-lt)">All major belt drive brands.</h2>
+                <div class="rule-lt"></div>
+                <div class="brand-grid">
+                    <div class="brand-section-label">International Brands</div>
+                    <div class="brand-cell"><div class="logo-box"><img src="./assets/brand/gates.svg" alt="Gates logo" onload="this.classList.add('loaded')" onerror="this.style.display='none'" /><span class="logo-box-ph">gates.svg</span></div><div class="brand-name">Gates</div><div class="brand-origin">USA</div></div>
+                    <div class="brand-cell"><div class="logo-box"><img src="./assets/brand/continental.svg" alt="Continental logo" onload="this.classList.add('loaded')" onerror="this.style.display='none'" /><span class="logo-box-ph">continental.svg</span></div><div class="brand-name">Continental</div><div class="brand-origin">Germany</div></div>
+                    <div class="brand-cell"><div class="logo-box"><img src="./assets/brand/fenner.svg" alt="Fenner logo" onload="this.classList.add('loaded')" onerror="this.style.display='none'" /><span class="logo-box-ph">fenner.svg</span></div><div class="brand-name">Fenner</div><div class="brand-origin">UK · Michelin</div></div>
+                    <div class="brand-cell"><div class="logo-box"><img src="./assets/brand/optibelt.png" alt="Optibelt logo" onload="this.classList.add('loaded')" onerror="this.style.display='none'" /><span class="logo-box-ph">optibelt.png</span></div><div class="brand-name">Optibelt</div><div class="brand-origin">Germany</div></div>
+                    <div class="brand-cell"><div class="logo-box"><img src="./assets/brand/bando.svg" alt="Bando logo" onload="this.classList.add('loaded')" onerror="this.style.display='none'" /><span class="logo-box-ph">bando.svg</span></div><div class="brand-name">Bando</div><div class="brand-origin">Japan</div></div>
+                    <div class="brand-cell"><div class="logo-box"><img src="./assets/brand/mitsuboshi.svg" alt="Mitsuboshi logo" onload="this.classList.add('loaded')" onerror="this.style.display='none'" /><span class="logo-box-ph">mitsuboshi.svg</span></div><div class="brand-name">Mitsuboshi</div><div class="brand-origin">Japan</div></div>
+                    <div class="brand-cell"><div class="logo-box"><img src="./assets/brand/habasit.png" alt="Habasit logo" onload="this.classList.add('loaded')" onerror="this.style.display='none'" /><span class="logo-box-ph">habasit.png</span></div><div class="brand-name">Habasit</div><div class="brand-origin">Switzerland</div></div>
+                    <div class="brand-cell"><div class="logo-box"><img src="./assets/brand/skfbelts.png" alt="SKF Belts logo" onload="this.classList.add('loaded')" onerror="this.style.display='none'" /><span class="logo-box-ph">skfbelts.png</span></div><div class="brand-name">SKF Belts</div><div class="brand-origin">Sweden</div></div>
+                    <div class="brand-cell"><div class="logo-box"><img src="./assets/brand/dunlop.png" alt="Dunlop Industrial logo" onload="this.classList.add('loaded')" onerror="this.style.display='none'" /><span class="logo-box-ph">dunlop.png</span></div><div class="brand-name">Dunlop Industrial</div><div class="brand-origin">UK</div></div>
+                    <div class="brand-cell"><div class="logo-box"><img src="./assets/brand/carlisle.svg" alt="Carlisle logo" onload="this.classList.add('loaded')" onerror="this.style.display='none'" /><span class="logo-box-ph">carlisle.svg</span></div><div class="brand-name">Carlisle</div><div class="brand-origin">USA</div></div>
+                    <div class="brand-cell"><div class="logo-box"><img src="./assets/brand/megadyne.png" alt="Megadyne logo" onload="this.classList.add('loaded')" onerror="this.style.display='none'" /><span class="logo-box-ph">megadyne.png</span></div><div class="brand-name">Megadyne</div><div class="brand-origin">Italy</div></div>
+                    <div class="brand-section-label">Indian Brands</div>
+                    <div class="brand-cell"><div class="logo-box"><img src="./assets/brand/pix.png" alt="PIX Transmissions logo" onload="this.classList.add('loaded')" onerror="this.style.display='none'" /><span class="logo-box-ph">pix.png</span></div><div class="brand-name">PIX Transmissions</div><div class="brand-origin">India</div></div>
+                    <div class="brand-cell"><div class="logo-box"><img src="./assets/brand/rubberforce.png" alt="Rubberforce logo" onload="this.classList.add('loaded')" onerror="this.style.display='none'" /><span class="logo-box-ph">rubberforce.png</span></div><div class="brand-name">Rubberforce</div><div class="brand-origin">India</div></div>
+                    <div class="brand-cell"><div class="logo-box"><img src="./assets/brand/mesco.png" alt="Mesco Belts logo" onload="this.classList.add('loaded')" onerror="this.style.display='none'" /><span class="logo-box-ph">mesco.png</span></div><div class="brand-name">Mesco Belts</div><div class="brand-origin">India</div></div>
+                    <div class="brand-cell"><div class="logo-box"><img src="./assets/brand/flexibelt.png" alt="Flexibelt logo" onload="this.classList.add('loaded')" onerror="this.style.display='none'" /><span class="logo-box-ph">flexibelt.png</span></div><div class="brand-name">Flexibelt</div><div class="brand-origin">India</div></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="types-sec sec">
+            <div class="wrap">
+                <div class="eyebrow eyebrow-lt">Product Types</div>
+                <h2 style="color:var(--ink-lt)">Types of drive belts and when to use each.</h2>
+                <div class="rule-lt"></div>
+                <p class="lead-lt" style="max-width:520px">Using the wrong belt type causes premature failure regardless of brand quality. Specification always comes before brand selection.</p>
+                <div class="types-grid">
+                    <div class="type-cell reveal"><div class="type-icon">🔺</div><h3>Classical V-Belts (A/B/C/D)</h3><p>Most common type. Used in fans, pumps and compressors. Cross-section must exactly match the pulley groove.</p></div>
+                    <div class="type-cell reveal"><div class="type-icon">🔷</div><h3>Narrow V-Belts (SPZ/SPA/SPB/SPC)</h3><p>Higher power density. Run cooler, transmit more power per unit width. Preferred for high-efficiency drives and retrofits.</p></div>
+                    <div class="type-cell reveal"><div class="type-icon">⚙️</div><h3>Synchronous / Timing Belts</h3><p>Toothed belts for precise timing. Zero slip. Tooth profile must match exactly — HTD, GT and AT are not interchangeable.</p></div>
+                    <div class="type-cell reveal"><div class="type-icon">〰️</div><h3>Poly-V / Ribbed Belts</h3><p>Multiple V-ribs on a flat back. High flexibility, smooth operation. Common in HVAC and agricultural equipment.</p></div>
+                    <div class="type-cell reveal"><div class="type-icon">➖</div><h3>Flat Belts</h3><p>For high-speed, long centre-distance drives. Textile, wood processing and paper mills. Precise tensioning is critical.</p></div>
+                    <div class="type-cell reveal"><div class="type-icon">🔗</div><h3>Banded / Joined Belts</h3><p>Multiple V-belts joined at the top. Used where pulsating loads cause individual belts to jump — mining, heavy crushers.</p></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="guide-sec sec">
+            <div class="wrap">
+                <div class="eyebrow eyebrow-lt">Buyer's Guide</div>
+                <h2 style="color:var(--ink-lt)">How to source the right belt without overpaying.</h2>
+                <div class="rule-lt"></div>
+                <div class="guide-list">
+                    <div class="guide-item reveal"><div class="guide-n">1</div><div class="guide-body"><h3>Find the designation printed on the old belt.</h3><p>Every belt has a designation printed on it — "B-82", "SPB-2240", "8MGT-2240-30". Photograph it before discarding. This reference is consistent across all brands and prevents most sourcing errors.</p><span class="guide-tip">💡 Tip: No old belt? Share the machine make and model — we will identify the correct designation.</span></div></div>
+                    <div class="guide-item reveal"><div class="guide-n">2</div><div class="guide-body"><h3>Verify cross-brand compatibility before substituting.</h3><p>Standard designations (A, B, SPA, SPB, SPZ) are interchangeable across major brands. However some European OEM equipment uses proprietary profiles — Optibelt and Habasit in particular. We maintain cross-reference charts for all major brands.</p><span class="guide-tip">💡 Tip: Do not assume a standard designation applies to OEM equipment without verification.</span></div></div>
+                    <div class="guide-item reveal"><div class="guide-n">3</div><div class="guide-body"><h3>Replace all belts in a multi-belt drive simultaneously.</h3><p>Mixing old and new belts causes uneven load distribution — the new belt carries disproportionate load and fails early. One of the most common and preventable maintenance errors we encounter.</p><span class="guide-tip">💡 Tip: Ask us for matched set pricing — replacing all belts together is typically more economical.</span></div></div>
+                    <div class="guide-item reveal"><div class="guide-n">4</div><div class="guide-body"><h3>Validate the price before ordering.</h3><p>Import brand belts — particularly Gates and Continental — carry high distributor margins in India. The same designation can vary 30% or more. Send us the part number and quantity before placing any order.</p><span class="guide-tip">💡 Tip: Part number and quantity is all we need. Verified price by end of business day.</span></div></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="cta"><div class="cta-inner reveal"><div class="eyebrow eyebrow-dk" style="text-align:center;margin-bottom:12px">Get a Quote</div><h2 style="color:var(--txt)">Send us the designation and quantity.</h2><p class="lead-dk" style="margin-top:14px">Part number, brand preference and quantity. Verified market price by end of business day.</p><div class="cta-row" style="margin-top:28px"><a href="https://wa.me/919535657931?text=Belt+drive+price+quote" class="btn btn-wa btn-lg" target="_blank">WhatsApp for Belt Quote</a><button class="btn btn-ghost-dk btn-lg" onclick="go('contact')">Submit via Form</button></div></div></section>
+
+    </div>
+    <!-- /belts -->
+
+
+    <!-- ═══════════════════════════════════
+         BEARINGS PAGE
+    ═══════════════════════════════════ -->
+    <div id="page-bearings" class="page">
+
+        <section class="ph">
+            <div class="ph-inner">
+                <span class="ph-tag">Bearings</span>
+                <h1>Precision bearings at<br />real market prices.</h1>
+                <p class="lead-dk">SKF, NSK, FAG, Timken, NTN and more — genuine, authorised and accurately priced. Bearing counterfeiting is a known problem in India. We do not source from grey market channels.</p>
+                <div class="ph-btns">
+                    <a href="https://wa.me/919535657931?text=Bearings+price+quote" class="btn btn-green" target="_blank">Get Bearings Quote</a>
+                    <button class="btn btn-ghost-dk" onclick="go('contact')">Submit Requirement</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="brand-sec sec">
+            <div class="wrap">
+                <div class="eyebrow eyebrow-lt">Brand Network</div>
+                <h2 style="color:var(--ink-lt)">All major bearing brands.<br />Authorised sourcing only.</h2>
+                <div class="rule-lt"></div>
+                <div class="brand-grid">
+                    <div class="brand-section-label">International Brands</div>
+                    <div class="brand-cell"><div class="logo-box"><img src="./assets/brand/skf.svg" alt="SKF logo" onload="this.classList.add('loaded')" onerror="this.style.display='none'" /><span class="logo-box-ph">skf.svg</span></div><div class="brand-name">SKF</div><div class="brand-origin">Sweden</div></div>
+                    <div class="brand-cell"><div class="logo-box"><img src="./assets/brand/nsk.svg" alt="NSK logo" onload="this.classList.add('loaded')" onerror="this.style.display='none'" /><span class="logo-box-ph">nsk.svg</span></div><div class="brand-name">NSK</div><div class="brand-origin">Japan</div></div>
+                    <div class="brand-cell"><div class="logo-box"><img src="./assets/brand/fag.png" alt="FAG (Schaeffler) logo" onload="this.classList.add('loaded')" onerror="this.style.display='none'" /><span class="logo-box-ph">fag.png</span></div><div class="brand-name">FAG (Schaeffler)</div><div class="brand-origin">Germany</div></div>
+                    <div class="brand-cell"><div class="logo-box"><img src="./assets/brand/timken.svg" alt="Timken logo" onload="this.classList.add('loaded')" onerror="this.style.display='none'" /><span class="logo-box-ph">timken.svg</span></div><div class="brand-name">Timken</div><div class="brand-origin">USA</div></div>
+                    <div class="brand-cell"><div class="logo-box"><img src="./assets/brand/ntn.svg" alt="NTN logo" onload="this.classList.add('loaded')" onerror="this.style.display='none'" /><span class="logo-box-ph">ntn.svg</span></div><div class="brand-name">NTN</div><div class="brand-origin">Japan</div></div>
+                    <div class="brand-cell"><div class="logo-box"><img src="./assets/brand/ina.png" alt="INA (Schaeffler) logo" onload="this.classList.add('loaded')" onerror="this.style.display='none'" /><span class="logo-box-ph">ina.png</span></div><div class="brand-name">INA (Schaeffler)</div><div class="brand-origin">Germany</div></div>
+                    <div class="brand-cell"><div class="logo-box"><img src="./assets/brand/koyo.png" alt="Koyo (JTEKT) logo" onload="this.classList.add('loaded')" onerror="this.style.display='none'" /><span class="logo-box-ph">koyo.png</span></div><div class="brand-name">Koyo (JTEKT)</div><div class="brand-origin">Japan</div></div>
+                    <div class="brand-cell"><div class="logo-box"><img src="./assets/brand/snr.png" alt="SNR (NTN Group) logo" onload="this.classList.add('loaded')" onerror="this.style.display='none'" /><span class="logo-box-ph">snr.png</span></div><div class="brand-name">SNR (NTN Group)</div><div class="brand-origin">France</div></div>
+                    <div class="brand-cell"><div class="logo-box"><img src="./assets/brand/zkl.png" alt="ZKL logo" onload="this.classList.add('loaded')" onerror="this.style.display='none'" /><span class="logo-box-ph">zkl.png</span></div><div class="brand-name">ZKL</div><div class="brand-origin">Czech Republic</div></div>
+                    <div class="brand-cell"><div class="logo-box"><img src="./assets/brand/urb.png" alt="URB logo" onload="this.classList.add('loaded')" onerror="this.style.display='none'" /><span class="logo-box-ph">urb.png</span></div><div class="brand-name">URB</div><div class="brand-origin">Romania</div></div>
+                    <div class="brand-section-label">Indian Brands</div>
+                    <div class="brand-cell"><div class="logo-box"><img src="./assets/brand/nbc.png" alt="NBC Bearings logo" onload="this.classList.add('loaded')" onerror="this.style.display='none'" /><span class="logo-box-ph">nbc.png</span></div><div class="brand-name">NBC Bearings</div><div class="brand-origin">India</div></div>
+                    <div class="brand-cell"><div class="logo-box"><img src="./assets/brand/nrb.png" alt="NRB Bearings logo" onload="this.classList.add('loaded')" onerror="this.style.display='none'" /><span class="logo-box-ph">nrb.png</span></div><div class="brand-name">NRB Bearings</div><div class="brand-origin">India</div></div>
+                    <div class="brand-cell"><div class="logo-box"><img src="./assets/brand/zen.png" alt="ZEN Bearings logo" onload="this.classList.add('loaded')" onerror="this.style.display='none'" /><span class="logo-box-ph">zen.png</span></div><div class="brand-name">ZEN Bearings</div><div class="brand-origin">India</div></div>
+                    <div class="brand-cell"><div class="logo-box"><img src="./assets/brand/harsha.png" alt="Harsha Engineers logo" onload="this.classList.add('loaded')" onerror="this.style.display='none'" /><span class="logo-box-ph">harsha.png</span></div><div class="brand-name">Harsha Engineers</div><div class="brand-origin">India</div></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="types-sec sec">
+            <div class="wrap">
+                <div class="eyebrow eyebrow-lt">Product Types</div>
+                <h2 style="color:var(--ink-lt)">Types of bearings and when to use each.</h2>
+                <div class="rule-lt"></div>
+                <p class="lead-lt" style="max-width:520px">An incorrectly specified bearing will fail under load regardless of brand or price. Specification must precede brand selection.</p>
+                <div class="types-grid">
+                    <div class="type-cell reveal"><div class="type-icon">⭕</div><h3>Deep Groove Ball Bearings</h3><p>Most common type. Radial and moderate axial loads. Motors, fans and gearboxes. SKF 6000/6200/6300 series are universal standards.</p></div>
+                    <div class="type-cell reveal"><div class="type-icon">🔺</div><h3>Tapered Roller Bearings</h3><p>Combined radial and heavy axial loads. Essential for shafts and axles. Timken is the global authority. Always installed in opposing pairs.</p></div>
+                    <div class="type-cell reveal"><div class="type-icon">🔵</div><h3>Cylindrical Roller Bearings</h3><p>High radial capacity, low friction. Paper mills, rolling mills and heavy gearboxes. Do not use where significant thrust loads are present.</p></div>
+                    <div class="type-cell reveal"><div class="type-icon">🌐</div><h3>Spherical Roller Bearings</h3><p>Self-aligning. Ideal where shaft deflection is expected — conveyor pulleys, fans and heavy vibrating equipment.</p></div>
+                    <div class="type-cell reveal"><div class="type-icon">⬆️</div><h3>Thrust Ball Bearings</h3><p>Exclusively for axial loads — vertical shafts, screw jacks, cranes. Cannot carry radial loads under any circumstances.</p></div>
+                    <div class="type-cell reveal"><div class="type-icon">📏</div><h3>Needle Roller Bearings</h3><p>Very high radial capacity in compact space. Gearbox needle cages, rocker pivots and cam followers. INA is the category specialist.</p></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="guide-sec sec">
+            <div class="wrap">
+                <div class="eyebrow eyebrow-lt">Buyer's Guide</div>
+                <h2 style="color:var(--ink-lt)">How to source the right bearing at the right price.</h2>
+                <div class="rule-lt"></div>
+                <div class="guide-list">
+                    <div class="guide-item reveal"><div class="guide-n">1</div><div class="guide-body"><h3>Find the full designation stamped on the bearing.</h3><p>Every bearing has a designation stamped on its outer ring — "6205 2RS" or "NU 310 ECM". This fully defines the bearing across all brands. Photograph it before discarding the old bearing. Most sourcing errors begin with an incorrect or incomplete part number.</p><span class="guide-tip">💡 Tip: If you cannot find the designation, share the machine make and model — we will identify it.</span></div></div>
+                    <div class="guide-item reveal"><div class="guide-n">2</div><div class="guide-body"><h3>Understand the suffix — it changes the bearing.</h3><p>"2RS" means rubber sealed. "ZZ" means metal shielded. "C3" means extra internal clearance — required for high-temperature or press-fit applications. A 6205 2RS and a 6205 2RS C3 are different bearings and are not interchangeable. The wrong suffix causes premature failure.</p><span class="guide-tip">💡 Tip: Always share the complete designation including all suffix codes. We verify before quoting.</span></div></div>
+                    <div class="guide-item reveal"><div class="guide-n">3</div><div class="guide-body"><h3>Insist on authorised supply with traceable provenance.</h3><p>Bearing counterfeiting is extensive in India. Fake SKF and NSK bearings are visually indistinguishable from genuine products and fail under operating load — often catastrophically. There is no compromise on authorised sourcing for critical machinery. We source exclusively through authorised channels.</p><span class="guide-tip">💡 Tip: If a supplier cannot confirm the authorised distributor chain, do not proceed with that purchase.</span></div></div>
+                    <div class="guide-item reveal"><div class="guide-n">4</div><div class="guide-body"><h3>Validate the price before ordering.</h3><p>The same bearing can vary 30–50% across authorised distributors in the same city. Large industrial buyers with modest volumes frequently pay full retail. Share your part number, quantity and current price — we will tell you where it stands.</p><span class="guide-tip">💡 Tip: Part number and quantity is all we need. Verified market comparison by end of business day.</span></div></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="cta"><div class="cta-inner reveal"><div class="eyebrow eyebrow-dk" style="text-align:center;margin-bottom:12px">Get a Quote</div><h2 style="color:var(--txt)">Share the bearing number.<br />We find the fair price.</h2><p class="lead-dk" style="margin-top:14px">Full designation including suffix, quantity and brand preference. Verified price by end of business day.</p><div class="cta-row" style="margin-top:28px"><a href="https://wa.me/919535657931?text=Bearings+price+quote" class="btn btn-wa btn-lg" target="_blank">WhatsApp for Bearings Quote</a><button class="btn btn-ghost-dk btn-lg" onclick="go('contact')">Submit via Form</button></div></div></section>
+
+    </div>
+    <!-- /bearings -->
+
+
+    <!-- ═══════════════════════════════════
+         CONTACT PAGE
+    ═══════════════════════════════════ -->
+    <div id="page-contact" class="page">
+
+        <section class="ph">
+            <div class="ph-inner">
+                <span class="ph-tag">Contact</span>
+                <h1>Tell us what you need.<br />We respond today.</h1>
+                <p class="lead-dk">Share your requirement below and we will return a verified market price by end of the same business day. No obligation to proceed after receiving the quote.</p>
+            </div>
+        </section>
+
+        <section class="contact-sec sec">
+            <div class="contact-layout wrap">
+
+                <!-- FORM -->
+                <div>
+                    <div class="eyebrow eyebrow-lt" style="margin-bottom:10px">Submit a Requirement</div>
+                    <h2 style="color:var(--ink-lt);font-size:1.7rem;margin-bottom:8px">Send us your requirement.</h2>
+                    <p class="lead-lt" style="font-size:.87rem;margin-bottom:28px;max-width:440px">We review every submission and respond with a verified market quote by end of the same business day.</p>
+                    <div id="c-ok">✅ Your requirement has been received. We will respond with a verified market price by end of today. Thank you.</div>
+                    <div id="c-err">❌ Something went wrong. Please reach us via WhatsApp or email directly.</div>
+                    <!--
+                      EMAIL SETUP:
+                      1. Sign up free at https://formspree.io
+                      2. Create a form linked to your email
+                      3. Replace YOUR_FORM_ID below with your actual Formspree form ID
+                    -->
+                    <form class="c-form" id="cForm">
+                        <div class="c-row">
+                            <div class="fld"><label>Company Name *</label><input type="text" name="company" placeholder="Your company name" required /></div>
+                            <div class="fld"><label>Contact Person *</label><input type="text" name="contact_person" placeholder="Your full name" required /></div>
+                        </div>
+                        <div class="c-row">
+                            <div class="fld"><label>Email Address *</label><input type="email" name="email" placeholder="you@company.com" required /></div>
+                            <div class="fld"><label>WhatsApp Number *</label><input type="tel" name="whatsapp" placeholder="+91 XXXXX XXXXX" required /></div>
+                        </div>
+                        <div class="fld"><label>Product Category *</label>
+                            <select name="category" required>
+                                <option value="" disabled selected>Select a category</option>
+                                <option>Lubricants</option>
+                                <option>Belt Drives</option>
+                                <option>Bearings</option>
+                                <option>Multiple categories</option>
+                            </select>
+                        </div>
+                        <div class="fld"><label>Product Specification / Details *</label>
+                            <textarea name="spec" placeholder="e.g. Shell Tellus S2 MX 46 hydraulic oil, or describe the application. For bearings: full designation including suffix. For belts: designation printed on the old belt." required></textarea>
+                        </div>
+                        <div class="c-row">
+                            <div class="fld"><label>Quantity Required *</label><input type="text" name="quantity" placeholder="e.g. 10 drums, 50 pieces" required /></div>
+                            <div class="fld"><label>Delivery Location</label><input type="text" name="location" placeholder="City / State" /></div>
+                        </div>
+                        <div class="fld"><label>Additional Notes</label>
+                            <textarea name="notes" placeholder="Brand preference, current supplier price for comparison, urgency, or any other relevant information" style="min-height:80px"></textarea>
+                        </div>
+                        <div class="c-footer">
+                            <button type="submit" class="btn btn-green btn-lg" id="sbtn">Submit Requirement</button>
+                            <span class="c-note">We respond by end of the same business day</span>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- ASIDE -->
+                <div>
+                    <div class="c-aside">
+                        <div class="c-block">
+                            <div class="eyebrow eyebrow-dk" style="margin-bottom:14px">Or reach us directly</div>
+                            <h3>WhatsApp</h3>
+                            <p>Fastest way to reach us. Send your product details and we will respond the same business day.</p>
+                            <span class="c-resp">Monday to Saturday, 9 AM to 10 PM</span>
+                        </div>
+                        <div class="c-block">
+                            <h3>Email</h3>
+                            <p>For detailed requirements, quotation comparisons or documentation needs.</p>
+                            <a href="mailto:contact@fieldprice.in">contact@fieldprice.in</a>
+                            <span class="c-resp">Same business day response</span>
+                        </div>
+                        <div class="c-hint">
+                            <p><strong>What to include</strong>Product type and grade or part number · Quantity · Brand preference · Delivery location · Current supplier price if you want a direct comparison</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </div>
+    <!-- /contact -->
+
+
+    <!-- ═══════ FOOTER ═══════ -->
+    <footer>
+        <div class="footer-inner">
+            <div>
+                <div class="f-logo">Field<span>Price</span></div>
+                <p class="f-desc">A network of sales engineers helping industrial buyers secure fair, verified prices for lubricants, belt drives and bearings — through authorised distributors across India.</p>
+            </div>
+            <div>
+                <div class="f-col-h">Pages</div>
+                <ul class="f-links">
+                    <li><button onclick="go('home')">Home</button></li>
+                    <li><button onclick="go('lubricants')">Lubricants</button></li>
+                    <li><button onclick="go('belts')">Belt Drives</button></li>
+                    <li><button onclick="go('bearings')">Bearings</button></li>
+                    <li><button onclick="go('contact')">Contact</button></li>
+                </ul>
+            </div>
+            <div>
+                <div class="f-col-h">Contact</div>
+                <ul class="f-links">
+                    <li><a href="https://wa.me/919535657931" target="_blank">WhatsApp</a></li>
+                    <li><a href="mailto:contact@fieldprice.in">contact@fieldprice.in</a></li>
+                </ul>
+            </div>
+            <div>
+                <div class="f-col-h">We Source</div>
+                <ul class="f-links">
+                    <li><button onclick="go('lubricants')">Lubricants</button></li>
+                    <li><button onclick="go('belts')">Belt Drives</button></li>
+                    <li><button onclick="go('bearings')">Bearings</button></li>
+                </ul>
+            </div>
+        </div>
+        <div class="f-bottom">
+            <span class="f-copy">© 2026 FieldPrice. Authorised sourcing. Verified pricing.</span>
+            <span class="f-copy">contact@fieldprice.in</span>
+        </div>
+    </footer>
+
+    <!-- Floating WhatsApp -->
+    <a class="wa-float" href="https://wa.me/919535657931?text=Hi%2C+I+need+a+price+quote" target="_blank">
+        <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    </a>
+
+    <script>
+        /* ── HASH ROUTING ── */
+        function go(id, btn) {
+            // Update active page
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            const target = document.getElementById('page-' + id);
+            if (target) target.classList.add('active');
+
+            // Update nav buttons
+            document.querySelectorAll('.nav-links button').forEach(b => b.classList.remove('active'));
+            if (btn) {
+                btn.classList.add('active');
+            } else {
+                document.querySelectorAll('.nav-links button').forEach(b => {
+                    const t = b.textContent.toLowerCase();
+                    if ((id === 'home' && t === 'home') ||
+                        (id === 'lubricants' && t === 'lubricants') ||
+                        (id === 'belts' && t.includes('belt')) ||
+                        (id === 'bearings' && t === 'bearings') ||
+                        (id === 'contact' && t === 'contact'))
+                        b.classList.add('active');
+                });
+            }
+
+            // Update URL hash (without scrolling)
+            if (history.pushState) {
+                history.pushState(null, null, '#' + id);
+            } else {
+                window.location.hash = id;
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            setTimeout(reveal, 100);
+        }
+
+        // Listen for hash changes (back/forward)
+        window.addEventListener('popstate', function() {
+            var hash = window.location.hash.replace('#', '') || 'home';
+            go(hash);
+        });
+
+        // On load, read hash and show correct page
+        window.addEventListener('load', function() {
+            var hash = window.location.hash.replace('#', '') || 'home';
+            go(hash);
+        });
+
+        /* ── SCROLL REVEAL ── */
+        function reveal() {
+            const els = document.querySelectorAll('.reveal:not(.in)');
+            if (!els.length) return;
+            const obs = new IntersectionObserver((entries) => {
+                entries.forEach((e, i) => {
+                    if (e.isIntersecting) {
+                        setTimeout(() => e.target.classList.add('in'), i * 65);
+                        obs.unobserve(e.target);
+                    }
+                });
+            }, { threshold: 0.08 });
+            els.forEach(el => obs.observe(el));
+        }
+        document.addEventListener('DOMContentLoaded', reveal);
+        window.addEventListener('scroll', reveal, { passive: true });
+
+        /* ── FORM ──
+           Sign up free at formspree.io, create a form, paste your form ID below.
+           All submissions will be emailed to you automatically.
+        */
+        document.getElementById('cForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const btn = document.getElementById('sbtn');
+            const originalText = btn.textContent;
+            btn.textContent = 'Sending…';
+            btn.disabled = true;
+
+            // ⚠️ REPLACE 'YOUR_FORM_ID' WITH YOUR ACTUAL FORMSPREE FORM ID
+            const ENDPOINT = 'https://formspree.io/f/YOUR_FORM_ID';
+
+            try {
+                const r = await fetch(ENDPOINT, {
+                    method: 'POST',
+                    body: new FormData(this),
+                    headers: { Accept: 'application/json' }
+                });
+                if (r.ok) {
+                    document.getElementById('c-ok').style.display = 'block';
+                    document.getElementById('c-err').style.display = 'none';
+                    // Show success but keep the form visible (disabled and faded)
+                    this.querySelectorAll('input, select, textarea, button').forEach(el => {
+                        el.disabled = true;
+                    });
+                    btn.textContent = '✅ Submitted';
+                    // Optionally hide the form fields after a delay, or keep them visible
+                } else {
+                    throw new Error('Formspree error');
+                }
+            } catch (_) {
+                document.getElementById('c-err').style.display = 'block';
+                btn.textContent = originalText;
+                btn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>
