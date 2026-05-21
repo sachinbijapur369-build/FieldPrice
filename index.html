@@ -237,11 +237,12 @@
 
         .btn-green {
             background: var(--green);
-            color: #fff;
+            color: var(--ink);
             box-shadow: 0 4px 12px rgba(34, 197, 94, 0.25);
         }
         .btn-green:hover {
             background: var(--green-dk);
+            color: var(--ink);
             transform: translateY(-3px);
             box-shadow: 0 8px 28px rgba(34, 197, 94, .35);
         }
@@ -255,27 +256,28 @@
         }
         .btn-green:disabled {
             background: var(--ink-lt-30);
+            color: var(--ink-lt-60);
             cursor: not-allowed;
             transform: none;
             box-shadow: none;
         }
 
         .btn-wa {
-            background: #1dab5f;
+            background: #128C7E;
             color: #fff;
-            box-shadow: 0 4px 12px rgba(29, 171, 95, 0.25);
+            box-shadow: 0 4px 12px rgba(18, 140, 126, 0.25);
         }
         .btn-wa:hover {
-            background: #18984f;
+            background: #075E54;
             transform: translateY(-3px);
-            box-shadow: 0 8px 28px rgba(29, 171, 95, .35);
+            box-shadow: 0 8px 28px rgba(7, 94, 84, .35);
         }
         .btn-wa:active {
             transform: translateY(-1px);
-            box-shadow: 0 4px 16px rgba(29, 171, 95, 0.20);
+            box-shadow: 0 4px 16px rgba(18, 140, 126, 0.20);
         }
         .btn-wa:focus-visible {
-            outline: 3px solid #1dab5f;
+            outline: 3px solid #128C7E;
             outline-offset: 3px;
         }
 
@@ -424,7 +426,7 @@
         @keyframes fadein {
             from {
                 opacity: 0;
-                transform: translateY(16px);
+                transform: translateY(24px);
             }
             to {
                 opacity: 1;
@@ -445,7 +447,7 @@
         .hero-bg {
             position: absolute;
             inset: 0;
-            background-image: url('./assets/hero.jpg');
+            background-image: url('./assets/hero.png');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -1405,7 +1407,7 @@
             width: 54px;
             height: 54px;
             border-radius: 50%;
-            background: #1dab5f;
+            background: #25D366;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -1413,7 +1415,7 @@
             transition: all .3s ease;
         }
         .wa-float:hover {
-            background: #18984f;
+            background: #128C7E;
             transform: scale(1.08) translateY(-3px);
             box-shadow: 0 8px 32px rgba(0, 0, 0, .45);
         }
@@ -1435,12 +1437,13 @@
             justify-content: center;
             box-shadow: 0 4px 24px rgba(0, 0, 0, .35);
             transition: all .3s ease;
-            color: #fff;
+            color: var(--ink);
             font-weight: 700;
             font-size: 1.3rem;
         }
         .quote-float:hover {
             background: var(--green-dk);
+            color: var(--ink);
             transform: scale(1.08) translateY(-3px);
             box-shadow: 0 8px 32px rgba(0, 0, 0, .45);
         }
@@ -1457,6 +1460,156 @@
         .reveal.in {
             opacity: 1;
             transform: translateY(0);
+        }
+
+        /* ── FORM ERROR STYLES ── */
+        .error-msg {
+            display: none;
+            font-size: .72rem;
+            color: #ef4444;
+            margin-top: 4px;
+            font-weight: 500;
+            letter-spacing: .01em;
+            animation: errorShake .35s ease;
+        }
+        .error-msg.show {
+            display: block;
+        }
+        @keyframes errorShake {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-4px); }
+            40% { transform: translateX(4px); }
+            60% { transform: translateX(-3px); }
+            80% { transform: translateX(2px); }
+        }
+        .fld input.error,
+        .fld select.error,
+        .fld textarea.error {
+            border-color: #ef4444;
+            box-shadow: 0 0 0 4px rgba(239, 68, 68, .10);
+        }
+
+        /* ── NOISE TEXTURE ── */
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            pointer-events: none;
+            opacity: 0.025;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+            background-repeat: repeat;
+            background-size: 180px;
+        }
+
+        /* ── FLOATING BUTTON TOOLTIPS ── */
+        .wa-float,
+        .quote-float {
+            position: relative;
+        }
+        .wa-float::before {
+            content: 'Chat with us';
+            position: absolute;
+            right: calc(100% + 12px);
+            top: 50%;
+            transform: translateY(-50%) scale(0.85);
+            padding: 6px 14px;
+            border-radius: 6px;
+            background: rgba(18,18,18,0.92);
+            color: #fff;
+            font-family: var(--sans);
+            font-size: .72rem;
+            font-weight: 600;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: all .25s ease;
+            box-shadow: 0 4px 16px rgba(0,0,0,.25);
+            letter-spacing: .01em;
+        }
+        .wa-float:hover::before {
+            opacity: 1;
+            transform: translateY(-50%) scale(1);
+        }
+        .quote-float::before {
+            content: 'Get a quote';
+            position: absolute;
+            right: calc(100% + 12px);
+            top: 50%;
+            transform: translateY(-50%) scale(0.85);
+            padding: 6px 14px;
+            border-radius: 6px;
+            background: rgba(18,18,18,0.92);
+            color: #fff;
+            font-family: var(--sans);
+            font-size: .72rem;
+            font-weight: 600;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: all .25s ease;
+            box-shadow: 0 4px 16px rgba(0,0,0,.25);
+            letter-spacing: .01em;
+        }
+        .quote-float:hover::before {
+            opacity: 1;
+            transform: translateY(-50%) scale(1);
+        }
+
+        /* ── BACK TO TOP ── */
+        .back-to-top {
+            position: fixed;
+            bottom: 28px;
+            left: 28px;
+            z-index: 400;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid var(--bd-dark-hi);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--txt-40);
+            font-size: .9rem;
+            opacity: 0;
+            transform: translateY(10px);
+            pointer-events: none;
+            transition: all .3s ease;
+        }
+        .back-to-top.visible {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+        .back-to-top:hover {
+            background: rgba(255,255,255,0.14);
+            color: var(--txt);
+            transform: translateY(-3px);
+        }
+
+        /* ── HERO LOADING SHIMMER ── */
+        .hero-bg::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,.03) 50%, transparent 100%);
+            animation: shimmer 2s ease infinite;
+        }
+        .hero-bg.loaded::after {
+            display: none;
+        }
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* ── ANIMATED COUNTER ── */
+        .metric-num {
+            transition: color .3s ease;
         }
 
         /* ── RESPONSIVE ── */
@@ -1510,12 +1663,14 @@
                 top: 68px;
                 left: 0;
                 right: 0;
-                background: rgba(18, 18, 18, 0.92);
+                background: rgba(18, 18, 18, 0.95);
                 backdrop-filter: blur(24px);
                 -webkit-backdrop-filter: blur(24px);
                 border-bottom: 1px solid var(--bd-dark);
                 padding: 12px 5%;
                 gap: 2px;
+                max-height: calc(100vh - 68px);
+                overflow-y: auto;
             }
             .nav-links.open {
                 display: flex;
@@ -1582,9 +1737,9 @@
 
     <!-- ═══════ NAV ═══════ -->
     <nav id="mainNav" aria-label="Main navigation">
-        <div class="logo" onclick="go('home')" tabindex="0" role="button" aria-label="FieldPrice Home">
+        <a href="#home" class="logo" onclick="go('home'); return false;" aria-label="FieldPrice Home">
             <span class="logo-f">Field</span><span class="logo-p">Price</span>
-        </div>
+        </a>
         <ul class="nav-links" id="navLinks" role="menubar">
             <li role="none"><button class="active" onclick="go('home',this)" role="menuitem" aria-current="page">Home</button></li>
             <li role="none"><button onclick="go('lubricants',this)" role="menuitem">Lubricants</button></li>
@@ -1593,6 +1748,7 @@
             <li role="none"><button onclick="go('generators',this)" role="menuitem">Generators</button></li>
             <li role="none"><button onclick="go('compressors',this)" role="menuitem">Compressors</button></li>
             <li role="none"><button onclick="go('pressbreak',this)" role="menuitem">Pressbreak Machines</button></li>
+            <li role="none"><button onclick="go('contact',this)" role="menuitem">Contact</button></li>
         </ul>
         <button class="hamburger" id="hamburger" aria-label="Toggle navigation menu" aria-expanded="false">
             <span></span><span></span><span></span>
@@ -1746,7 +1902,7 @@
                 <div class="rule-dk"></div>
                 <p class="lead-dk" style="max-width:480px">Authorised sourcing only. Every product is genuine, manufacturer-traceable and priced at what the market actually charges.</p>
                 <div class="prod-grid reveal">
-                    <div class="prod-card" onclick="go('lubricants')" tabindex="0" role="button" aria-label="Explore Lubricants">
+                    <a href="#lubricants" class="prod-card" onclick="go('lubricants'); return false;" aria-label="Explore Lubricants">
                         <div class="prod-n">01 —</div>
                         <h3>Lubricants</h3>
                         <p>Hydraulic oils, gear oils, engine oils, greases, compressor fluids and specialty lubricants for every industrial application.</p>
@@ -1755,8 +1911,8 @@
                             <span class="chip-dk">Gulf</span><span class="chip-dk">Total</span><span class="chip-dk">Fuchs</span>
                         </div>
                         <span class="prod-arrow">Explore →</span>
-                    </div>
-                    <div class="prod-card" onclick="go('belts')" tabindex="0" role="button" aria-label="Explore Belt Drives">
+                    </a>
+                    <a href="#belts" class="prod-card" onclick="go('belts'); return false;" aria-label="Explore Belt Drives">
                         <div class="prod-n">02 —</div>
                         <h3>Belt Drives</h3>
                         <p>V-belts, timing belts, flat belts and ribbed belts for industrial power transmission and drive systems of all capacities.</p>
@@ -1765,8 +1921,8 @@
                             <span class="chip-dk">Optibelt</span><span class="chip-dk">Bando</span><span class="chip-dk">PIX</span>
                         </div>
                         <span class="prod-arrow">Explore →</span>
-                    </div>
-                    <div class="prod-card" onclick="go('bearings')" tabindex="0" role="button" aria-label="Explore Bearings">
+                    </a>
+                    <a href="#bearings" class="prod-card" onclick="go('bearings'); return false;" aria-label="Explore Bearings">
                         <div class="prod-n">03 —</div>
                         <h3>Bearings</h3>
                         <p>Ball, roller, tapered, spherical and thrust bearings from the world's most trusted precision engineering manufacturers.</p>
@@ -1775,8 +1931,8 @@
                             <span class="chip-dk">Timken</span><span class="chip-dk">NTN</span><span class="chip-dk">NBC</span>
                         </div>
                         <span class="prod-arrow">Explore →</span>
-                    </div>
-                    <div class="prod-card" onclick="go('generators')" tabindex="0" role="button" aria-label="Explore Generators">
+                    </a>
+                    <a href="#generators" class="prod-card" onclick="go('generators'); return false;" aria-label="Explore Generators">
                         <div class="prod-n">04 —</div>
                         <h3>Generators</h3>
                         <p>Diesel generators, gas generators, portable sets and industrial standby power solutions from the world's leading brands.</p>
@@ -1785,8 +1941,8 @@
                             <span class="chip-dk">Mahindra</span><span class="chip-dk">KOEL</span><span class="chip-dk">Sudhir</span>
                         </div>
                         <span class="prod-arrow">Explore →</span>
-                    </div>
-                    <div class="prod-card" onclick="go('compressors')" tabindex="0" role="button" aria-label="Explore Air Compressors">
+                    </a>
+                    <a href="#compressors" class="prod-card" onclick="go('compressors'); return false;" aria-label="Explore Air Compressors">
                         <div class="prod-n">05 —</div>
                         <h3>Air Compressors</h3>
                         <p>Rotary screw, reciprocating, centrifugal and portable compressors for industrial air systems at the most competitive market prices.</p>
@@ -1795,8 +1951,8 @@
                             <span class="chip-dk">Kaeser</span><span class="chip-dk">Chicago Pneu</span><span class="chip-dk">Sullair</span>
                         </div>
                         <span class="prod-arrow">Explore →</span>
-                    </div>
-                    <div class="prod-card" onclick="go('pressbreak')" tabindex="0" role="button" aria-label="Explore Pressbreak Machines">
+                    </a>
+                    <a href="#pressbreak" class="prod-card" onclick="go('pressbreak'); return false;" aria-label="Explore Pressbreak Machines">
                         <div class="prod-n">06 —</div>
                         <h3>Pressbreak Machines</h3>
                         <p>Hydraulic press brakes, CNC press brakes, mechanical press brakes, and custom sheet metal forming solutions for precision industrial fabrication.</p>
@@ -1805,7 +1961,7 @@
                             <span class="chip-dk">LVD</span><span class="chip-dk">Amada</span><span class="chip-dk">Bystronic</span>
                         </div>
                         <span class="prod-arrow">Explore →</span>
-                    </div>
+                    </a>
                 </div>
             </div>
         </section>
@@ -2497,31 +2653,31 @@
                     <form class="c-form" id="cForm" novalidate>
                         <div class="c-row">
                             <div class="fld">
-                                <label>Company Name *</label>
-                                <input type="text" name="company" placeholder="Your company name" required />
-                                <span class="error-msg">Please enter your company name.</span>
+                                <label for="c-company">Company Name *</label>
+                                <input id="c-company" type="text" name="company" placeholder="Your company name" required aria-describedby="err-company" />
+                                <span id="err-company" class="error-msg">Please enter your company name.</span>
                             </div>
                             <div class="fld">
-                                <label>Contact Person *</label>
-                                <input type="text" name="contact_person" placeholder="Your full name" required />
-                                <span class="error-msg">Please enter your full name.</span>
+                                <label for="c-contact">Contact Person *</label>
+                                <input id="c-contact" type="text" name="contact_person" placeholder="Your full name" required aria-describedby="err-contact" />
+                                <span id="err-contact" class="error-msg">Please enter your full name.</span>
                             </div>
                         </div>
                         <div class="c-row">
                             <div class="fld">
-                                <label>Email Address *</label>
-                                <input type="email" name="email" placeholder="you@company.com" required />
-                                <span class="error-msg">Please enter a valid email address.</span>
+                                <label for="c-email">Email Address *</label>
+                                <input id="c-email" type="email" name="email" placeholder="you@company.com" required aria-describedby="err-email" />
+                                <span id="err-email" class="error-msg">Please enter a valid email address.</span>
                             </div>
                             <div class="fld">
-                                <label>WhatsApp Number *</label>
-                                <input type="tel" name="whatsapp" placeholder="+91 XXXXX XXXXX" required />
-                                <span class="error-msg">Please enter a valid WhatsApp number.</span>
+                                <label for="c-wa">WhatsApp Number *</label>
+                                <input id="c-wa" type="tel" name="whatsapp" placeholder="+91 XXXXX XXXXX" required aria-describedby="err-wa" />
+                                <span id="err-wa" class="error-msg">Please enter a valid WhatsApp number.</span>
                             </div>
                         </div>
                         <div class="fld">
-                            <label>Product Category *</label>
-                            <select name="category" required>
+                            <label for="c-category">Product Category *</label>
+                            <select id="c-category" name="category" required aria-describedby="err-category">
                                 <option value="" disabled selected>Select a category</option>
                                 <option>Lubricants</option>
                                 <option>Belt Drives</option>
@@ -2531,27 +2687,27 @@
                                 <option>Pressbreak Machines</option>
                                 <option>Multiple categories</option>
                             </select>
-                            <span class="error-msg">Please select a product category.</span>
+                            <span id="err-category" class="error-msg">Please select a product category.</span>
                         </div>
                         <div class="fld">
-                            <label>Product Specification / Details *</label>
-                            <textarea name="spec" placeholder="e.g. Shell Tellus S2 MX 46 hydraulic oil, or describe the application. For bearings: full designation including suffix. For belts: designation printed on the old belt." required></textarea>
-                            <span class="error-msg">Please provide product specification details.</span>
+                            <label for="c-spec">Product Specification / Details *</label>
+                            <textarea id="c-spec" name="spec" placeholder="e.g. Shell Tellus S2 MX 46 hydraulic oil, or describe the application. For bearings: full designation including suffix. For belts: designation printed on the old belt." required aria-describedby="err-spec"></textarea>
+                            <span id="err-spec" class="error-msg">Please provide product specification details.</span>
                         </div>
                         <div class="c-row">
                             <div class="fld">
-                                <label>Quantity Required *</label>
-                                <input type="text" name="quantity" placeholder="e.g. 10 drums, 50 pieces" required />
-                                <span class="error-msg">Please enter the quantity required.</span>
+                                <label for="c-qty">Quantity Required *</label>
+                                <input id="c-qty" type="text" name="quantity" placeholder="e.g. 10 drums, 50 pieces" required aria-describedby="err-qty" />
+                                <span id="err-qty" class="error-msg">Please enter the quantity required.</span>
                             </div>
                             <div class="fld">
-                                <label>Delivery Location</label>
-                                <input type="text" name="location" placeholder="City / State" />
+                                <label for="c-location">Delivery Location</label>
+                                <input id="c-location" type="text" name="location" placeholder="City / State" />
                             </div>
                         </div>
                         <div class="fld">
-                            <label>Additional Notes</label>
-                            <textarea name="notes" placeholder="Brand preference, current supplier price for comparison, urgency, or any other relevant information" style="min-height:80px"></textarea>
+                            <label for="c-notes">Additional Notes</label>
+                            <textarea id="c-notes" name="notes" placeholder="Brand preference, current supplier price for comparison, urgency, or any other relevant information" style="min-height:80px"></textarea>
                         </div>
                         <div class="c-footer">
                             <button type="submit" class="btn btn-green btn-lg" id="sbtn">Submit Requirement</button>
@@ -2635,10 +2791,15 @@
             </div>
         </div>
         <div class="f-bottom">
-            <span class="f-copy">© 2026 FieldPrice. Authorised sourcing. Verified pricing.</span>
+            <span class="f-copy">© <span id="copyrightYear">2026</span> FieldPrice. Authorised sourcing. Verified pricing.</span>
             <span class="f-copy">contact@fieldprice.in</span>
         </div>
     </footer>
+
+    <!-- ═══════ BACK TO TOP ═══════ -->
+    <button class="back-to-top" id="backToTop" aria-label="Back to top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
 
     <!-- ═══════ FLOATING BUTTONS ═══════ -->
     <div class="floating-btns">
@@ -2651,15 +2812,77 @@
     </div>
 
     <script>
-        /* ── NAV SCROLL ── */
+        /* ── NAV SCROLL + BACK TO TOP ── */
         window.addEventListener('scroll', function() {
             const nav = document.getElementById('mainNav');
+            const btt = document.getElementById('backToTop');
             if (window.scrollY > 20) {
                 nav.classList.add('scrolled');
             } else {
                 nav.classList.remove('scrolled');
             }
+            if (window.scrollY > 400) {
+                btt.classList.add('visible');
+            } else {
+                btt.classList.remove('visible');
+            }
         });
+
+        document.getElementById('backToTop').addEventListener('click', function() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        /* ── DYNAMIC COPYRIGHT YEAR ── */
+        document.getElementById('copyrightYear').textContent = new Date().getFullYear();
+
+        /* ── HERO IMAGE LOADING ── */
+        (function() {
+            const heroBg = document.querySelector('.hero-bg');
+            if (heroBg) {
+                const img = new Image();
+                img.onload = function() { heroBg.classList.add('loaded'); };
+                img.src = './assets/hero.png';
+                if (img.complete) heroBg.classList.add('loaded');
+            }
+        })();
+
+        /* ── ANIMATED METRIC COUNTERS ── */
+        (function() {
+            let counted = false;
+            function animateCounters() {
+                if (counted) return;
+                const metricsRow = document.querySelector('.metrics-row');
+                if (!metricsRow) return;
+                const rect = metricsRow.getBoundingClientRect();
+                if (rect.top < window.innerHeight && rect.bottom > 0) {
+                    counted = true;
+                    document.querySelectorAll('.metric-num').forEach(el => {
+                        const text = el.textContent.trim();
+                        const match = text.match(/^(\d+)(\+?)$/);
+                        if (match) {
+                            const target = parseInt(match[1]);
+                            const suffix = match[2] || '';
+                            let current = 0;
+                            const duration = 1800;
+                            const stepTime = 16;
+                            const steps = duration / stepTime;
+                            const increment = target / steps;
+                            el.textContent = '0' + suffix;
+                            const timer = setInterval(() => {
+                                current += increment;
+                                if (current >= target) {
+                                    current = target;
+                                    clearInterval(timer);
+                                }
+                                el.textContent = Math.floor(current) + suffix;
+                            }, stepTime);
+                        }
+                    });
+                }
+            }
+            window.addEventListener('scroll', animateCounters, { passive: true });
+            window.addEventListener('load', animateCounters);
+        })();
 
         /* ── HASH ROUTING ── */
         function go(id, btn) {
@@ -2770,11 +2993,12 @@
                 }
             }
 
-            // Validate WhatsApp (basic: +91 followed by 10 digits)
+            // Validate WhatsApp — lenient: accepts +91XXXXXXXXXX, 91XXXXXXXXXX, XXXXXXXXXX, and formats with spaces/dashes
             const waField = this.querySelector('input[name="whatsapp"]');
             if (waField && waField.value.trim()) {
-                const waPattern = /^\+91\d{10}$/;
-                if (!waPattern.test(waField.value.trim())) {
+                const cleaned = waField.value.trim().replace(/[\s\-\(\)]/g, '');
+                const waPattern = /^(\+?91)?[6-9]\d{9}$/;
+                if (!waPattern.test(cleaned)) {
                     waField.classList.add('error');
                     const parent = waField.closest('.fld');
                     if (parent) {
