@@ -499,7 +499,7 @@
             }
         }
 
-        /* ── HERO ── Full‑width with parallax and vibrant gradient */
+        /* ── HERO ── Full‑width with parallax */
         .hero {
             position: relative;
             min-height: 85vh;
@@ -1327,6 +1327,17 @@
             border: 1px solid #fca5a5;
             color: #b91c1c;
             font-size: .85rem;
+            margin-bottom: 18px;
+        }
+        #c-fallback {
+            display: none;
+            padding: 16px 20px;
+            border-radius: var(--r);
+            background: var(--green-bg);
+            border: 1px solid var(--green-bd);
+            color: var(--green-dk);
+            font-size: .85rem;
+            font-weight: 500;
             margin-bottom: 18px;
         }
 
@@ -2697,7 +2708,7 @@
                     <div class="guide-item reveal"><div class="guide-n">2</div><div class="guide-body"><h3>Choose between PSA, membrane, or high-purity systems.</h3><p>PSA for high purity, membrane for lower purity and lower cost, high-purity systems for critical applications. Your production requirements determine the right choice.</p><span class="guide-tip">💡 Tip: Tell us your purity and flow requirements — we will advise the optimal system type.</span></div></div>
                     <div class="guide-item reveal"><div class="guide-n">3</div><div class="guide-body"><h3>Verify compressor and dryer integration.</h3><p>Nitrogen generators require a feed compressor and air dryer for optimal performance. Ensure your system includes properly sized accessories or budget for them separately.</p><span class="guide-tip">💡 Tip: Share your existing compressor details — we will verify compatibility before you invest.</span></div></div>
                     <div class="guide-item reveal"><div class="guide-n">4</div><div class="guide-body"><h3>Factor in installation and maintenance.</h3><p>PSA systems require regular valve maintenance and filter replacement. Membrane systems have lower maintenance but higher operational cost. Factor these into your total cost of ownership.</p><span class="guide-tip">💡 Tip: We provide total cost of ownership comparisons for all major technologies.</span></div></div>
-                    <div class="guide-item reveal"><div class="guide-n">5</div><div class="guide-body"><h3>Compare prices across authorised channels.</h3><p>The same nitrogen generator can vary 20–35% across authorised distributors. Send us the model number and your required accessories — we will show you where the real market price stands, without obligation.</p><span class="guide-tip">💡 Tip: Model number and options list is all we need. Verified price by end of business day.</span></div></div>
+                    <div class="guide-item reveal"><div class="guide-n">5</div><div class="guide-body"><h3>Compare prices across authorised channels.</h3><p>The same nitrogen generator can vary 20–35% across authorised distributors. Send us the model number and your required accessories — we will show you where the real market price sits, without obligation.</p><span class="guide-tip">💡 Tip: Model number and options list is all we need. Verified price by end of business day.</span></div></div>
                 </div>
             </div>
         </section>
@@ -2731,6 +2742,9 @@
                     <p class="lead-lt" style="font-size:.87rem;margin-bottom:28px;max-width:440px">We review every submission and respond with a verified market quote by end of the same business day.</p>
                     <div id="c-ok">✅ Your requirement has been received. We will respond with a verified market price by end of today. Thank you.</div>
                     <div id="c-err">❌ Something went wrong. Please reach us via WhatsApp or email directly.</div>
+                    <div id="c-fallback">
+                        <p>⚠️ Our form is temporarily full. Please email us directly at <a href="mailto:contact@fieldprice.in?subject=Requirement%20for%20[Product%20Category]&body=Company%20Name%3A%0AContact%20Person%3A%0AProduct%20Specification%3A%0AQuantity%3A%0ADelivery%20Location%3A%0AWhatsApp%20Number%3A" style="color:var(--green-dk);font-weight:700;">contact@fieldprice.in</a> with your requirement and we will respond today.</p>
+                    </div>
 
                     <form class="c-form" id="cForm" novalidate>
                         <div class="c-row">
@@ -3046,7 +3060,6 @@
             btn.textContent = 'Sending…';
             btn.disabled = true;
 
-            // ✅ Your Formspree ID is: mkoyedow
             const ENDPOINT = 'https://formspree.io/f/mkoyedow';
 
             try {
@@ -3058,15 +3071,29 @@
                 if (r.ok) {
                     document.getElementById('c-ok').style.display = 'block';
                     document.getElementById('c-err').style.display = 'none';
+                    document.getElementById('c-fallback').style.display = 'none';
                     this.querySelectorAll('input, select, textarea, button').forEach(el => {
                         el.disabled = true;
                     });
                     btn.textContent = '✅ Submitted';
+
+                    // Reset the form after 5 seconds (so user can fill again if needed)
+                    setTimeout(() => {
+                        this.reset();
+                        this.querySelectorAll('input, select, textarea, button').forEach(el => {
+                            el.disabled = false;
+                        });
+                        document.getElementById('c-ok').style.display = 'none';
+                        btn.textContent = 'Submit Requirement';
+                    }, 5000);
                 } else {
                     throw new Error('Formspree error');
                 }
             } catch (_) {
-                document.getElementById('c-err').style.display = 'block';
+                // Hide the form fields, show fallback email link instead
+                this.style.display = 'none';
+                document.getElementById('c-err').style.display = 'none';
+                document.getElementById('c-fallback').style.display = 'block';
                 btn.textContent = originalText;
                 btn.disabled = false;
             }
